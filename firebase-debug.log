@@ -1,0 +1,54 @@
+[debug] [2025-07-31T14:16:52.264Z] ----------------------------------------------------------------------
+[debug] [2025-07-31T14:16:52.266Z] Command:       /usr/local/bin/node /Users/terence/.npm-global/bin/firebase emulators:start --only hosting
+[debug] [2025-07-31T14:16:52.266Z] CLI Version:   14.11.2
+[debug] [2025-07-31T14:16:52.266Z] Platform:      darwin
+[debug] [2025-07-31T14:16:52.266Z] Node Version:  v22.17.1
+[debug] [2025-07-31T14:16:52.266Z] Time:          Thu Jul 31 2025 22:16:52 GMT+0800 (Hong Kong Standard Time)
+[debug] [2025-07-31T14:16:52.266Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-07-31T14:16:52.392Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-07-31T14:16:52.393Z] > authorizing via signed-in user (terence.lwc@gmail.com)
+[info] i  emulators: Starting emulators: hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: hosting"}}
+[debug] [2025-07-31T14:16:52.604Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-07-31T14:16:52.604Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-07-31T14:16:52.604Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2025-07-31T14:16:52.607Z] [hub] writing locator at /var/folders/2f/6lnytm_97rsg5yzkytspl62h0000gn/T/hub-dictation-app-aa80d.json
+[debug] [2025-07-31T14:16:52.617Z] Checked if tokens are valid: true, expires at: 1753973257603
+[debug] [2025-07-31T14:16:52.617Z] Checked if tokens are valid: true, expires at: 1753973257603
+[debug] [2025-07-31T14:16:52.617Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/dictation-app-aa80d/sites 
+[debug] [2025-07-31T14:16:53.577Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/dictation-app-aa80d/sites 200
+[debug] [2025-07-31T14:16:53.577Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/dictation-app-aa80d/sites {"sites":[{"name":"projects/dictation-app-aa80d/sites/dictation-app-aa80d","defaultUrl":"https://dictation-app-aa80d.web.app","type":"DEFAULT_SITE"}]}
+[debug] [2025-07-31T14:16:53.577Z] Checked if tokens are valid: true, expires at: 1753973257603
+[debug] [2025-07-31T14:16:53.577Z] Checked if tokens are valid: true, expires at: 1753973257603
+[debug] [2025-07-31T14:16:53.577Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dictation-app-aa80d/webApps/-/config [none]
+[debug] [2025-07-31T14:16:54.903Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dictation-app-aa80d/webApps/-/config 200
+[debug] [2025-07-31T14:16:54.903Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dictation-app-aa80d/webApps/-/config {"projectId":"dictation-app-aa80d","storageBucket":"dictation-app-aa80d.firebasestorage.app","apiKey":"AIzaSyBHn6vpvoaqbdjPcNX6dENnG4CjokwK4Y4","authDomain":"dictation-app-aa80d.firebaseapp.com","messagingSenderId":"353838558256"}
+[debug] [2025-07-31T14:16:54.913Z] Checked if tokens are valid: true, expires at: 1753973257603
+[debug] [2025-07-31T14:16:54.913Z] Checked if tokens are valid: true, expires at: 1753973257603
+[debug] [2025-07-31T14:16:54.913Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/dictation-app-aa80d [none]
+[debug] [2025-07-31T14:16:55.207Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/dictation-app-aa80d 200
+[debug] [2025-07-31T14:16:55.207Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/dictation-app-aa80d {"projectId":"dictation-app-aa80d","projectNumber":"353838558256","displayName":"dictation-app","name":"projects/dictation-app-aa80d","resources":{"hostingSite":"dictation-app-aa80d"},"state":"ACTIVE","etag":"1_9a0ee387-16e4-4ee9-9e12-7c0a15de66e4"}
+[info] i  hosting[dictation-app-aa80d]: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] ✔  hosting[dictation-app-aa80d]: Local server: http://127.0.0.1:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5000\u001b[22m\u001b[24m"}}
+[warn] ⚠  emulators: The Emulator UI is not starting, either because none of the running emulators have a UI component or the Emulator UI cannot determine the Project ID. Pass the --project flag to specify a project. {"metadata":{"emulator":{"name":"hub"},"message":"The Emulator UI is not starting, either because none of the running emulators have a UI component or the Emulator UI cannot determine the Project ID. Pass the --project flag to specify a project."}}
+[debug] [2025-07-31T14:16:55.285Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────┬────────────────┐
+│ Emulator │ Host:Port      │
+├──────────┼────────────────┤
+│ Hosting  │ 127.0.0.1:5000 │
+└──────────┴────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[info] i  hosting: 127.0.0.1 - - [31/Jul/2025:14:18:28 +0000] "GET / HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [31/Jul/2025:14:18:28 +0000] \"GET / HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15\""}}
+[info] i  hosting: 127.0.0.1 - - [31/Jul/2025:14:18:28 +0000] "GET /style.css HTTP/1.1" 200 - "http://127.0.0.1:5000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [31/Jul/2025:14:18:28 +0000] \"GET /style.css HTTP/1.1\" 200 - \"http://127.0.0.1:5000/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15\""}}
+[info] i  hosting: 127.0.0.1 - - [31/Jul/2025:14:18:28 +0000] "GET /script.js HTTP/1.1" 200 - "http://127.0.0.1:5000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [31/Jul/2025:14:18:28 +0000] \"GET /script.js HTTP/1.1\" 200 - \"http://127.0.0.1:5000/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15\""}}
+[info] i  hosting: 127.0.0.1 - - [31/Jul/2025:14:18:28 +0000] "GET /favicon.ico HTTP/1.1" 200 - "http://127.0.0.1:5000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [31/Jul/2025:14:18:28 +0000] \"GET /favicon.ico HTTP/1.1\" 200 - \"http://127.0.0.1:5000/\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15\""}}
+[info] i  hosting: 127.0.0.1 - - [31/Jul/2025:14:20:50 +0000] "GET / HTTP/1.1" 200 - "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15" {"metadata":{"emulator":{"name":"hosting"},"message":"127.0.0.1 - - [31/Jul/2025:14:20:50 +0000] \"GET / HTTP/1.1\" 200 - \"-\" \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15\""}}
