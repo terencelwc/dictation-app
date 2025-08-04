@@ -242,11 +242,13 @@ button:disabled {
     padding: 8px;
     font-size: 13px;
     font-weight: 500;
+    background: rgba(255, 255, 255, 0.5); /* Increased transparency */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Adjusted shadow */
     line-height: 1.4;
     text-align: center;
     word-break: break-word; /* Helps with longer text */
-    color: white; /* Ensure text is white */
-
+    color: var(--text-primary); /* Use theme's primary text color for contrast */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for readability */
 }
 
 .button-secondary {
@@ -353,6 +355,87 @@ button:disabled {
 
 .input-with-button.hidden {
     display: none;
+}
+
+.feedback-link-container {
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+    font-size: 0.9rem;
+}
+
+.feedback-link-container a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--text-secondary);
+    transition: color 0.3s;
+}
+
+.feedback-link-container a:hover {
+    color: var(--text-primary);
+}
+
+.version-info-container {
+    position: absolute;
+    bottom: 15px;
+    right: 25px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.7; /* Make it a bit more subtle */
+}
+
+/* --- Modal Styles --- */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    background-color: var(--container-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--container-border);
+    margin: auto;
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    text-align: center;
+    animation: slideIn 0.4s;
+}
+
+.modal-close-btn {
+    color: var(--text-secondary);
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.modal-close-btn:hover {
+    color: var(--text-primary);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; }
 }
 
 .dictation-controls {

@@ -18,6 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const showAnswersButton = document.getElementById('show-answers-button');
     const resetButton = document.getElementById('reset-button');
 
+    // --- Feedback Modal Elements ---
+    const feedbackModal = document.getElementById('feedback-modal');
+    const feedbackLink = document.getElementById('feedback-link');
+    const closeModalBtn = document.querySelector('.modal-close-btn');
+    const sendFeedbackBtn = document.getElementById('send-feedback-btn');
+    const feedbackTextarea = document.getElementById('feedback-textarea');
+
     // --- State Management ---
     const synth = window.speechSynthesis;
     const LIST_STORAGE_KEY = 'dictationAppLists';
@@ -82,10 +89,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         utterance.onerror = (event) => {
+            // The 'canceled' error is expected when we interrupt speech to change parameters.
+            // We don't want to show this expected error to the user.
+            if (event.error === 'canceled') {
+                console.log('Speech was canceled intentionally.');
+                return;
+            }
             console.error('SpeechSynthesisUtterance.onerror', event);
             status.textContent = `An error occurred during speech: ${event.error}`;
             lastSpokenUtterance = { text: null, onEnd: null };
-            updateUIForSetup(); // Reset UI on error
+            setInitialUIState(); // Reset UI on error
         };
 
         synth.speak(utterance);
@@ -143,14 +156,19 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!window.confirm("Are you sure you want to reset? All entered text will be cleared.")) {
             return;
         }
-        const inputDivs = multiInputContainer.querySelectorAll('.input-with-button');
-        inputDivs.forEach(div => {
-            const textarea = div.querySelector('.vocabulary-input');
-            textarea.value = '';
-            textarea.classList.remove('masked');
-            textarea.readOnly = false;
-            div.classList.remove('hidden');
-        });
+        // Clear the container of all input lines
+        multiInputContainer.innerHTML = '';
+
+        // Re-create 6 default lines
+        for (let i = 1; i <= 6; i++) {
+            const newRow = document.createElement('div');
+            newRow.className = 'input-with-button';
+            newRow.innerHTML = `
+                <textarea class="vocabulary-input" rows="1" placeholder="Enter item ${i}..."></textarea>
+                <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+            `;
+            multiInputContainer.appendChild(newRow);
+        }
         setInitialUIState();
     }
 
@@ -303,6 +321,50 @@ document.addEventListener('DOMContentLoaded', () => {
         exportButton.addEventListener('click', exportLinesAsTxt);
         resetButton.addEventListener('click', resetApp);
 
+        // --- Feedback Modal Listeners ---
+        feedbackLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            feedbackModal.style.display = 'flex';
+        });
+
+        const closeModal = () => {
+            feedbackModal.style.display = 'none';
+        };
+
+        closeModalBtn.addEventListener('click', closeModal);
+        feedbackModal.addEventListener('click', (e) => {
+            // Close only if clicking the dark overlay, not the content box
+            if (e.target === feedbackModal) {
+                closeModal();
+            }
+        });
+
+        sendFeedbackBtn.addEventListener('click', () => {
+            const feedbackText = feedbackTextarea.value.trim();
+            if (!feedbackText) {
+                alert('Please enter your feedback before sending.');
+                return;
+            }
+
+            const recipient = 'prepb4@gmail.com';
+            const subject = 'Feedback for Dictation App';
+            const body = feedbackText;
+            const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            // This will open the user's default email client.
+            // It does not send the email automatically from the browser.
+            window.location.href = mailtoLink;
+
+            // Show thank you message and close modal
+            status.textContent = "Thank you! Your email app has been opened.";
+            setTimeout(() => {
+                status.textContent = '';
+                feedbackTextarea.value = ''; // Clear the textarea
+                closeModal();
+            }, 3000);
+        });
+
+
         multiInputContainer.addEventListener('keydown', (e) => {
             if (!e.target.matches('.vocabulary-input')) return;
 
@@ -353,326 +415,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
-        }
-    }
-
-    // --- List Actions ---
-    function shuffleAllLists() {
-        
-        allLists.forEach(list => {
-            const items = Array.from(list.children);
-            // Fisher-Yates shuffle algorithm for an unbiased shuffle
-            for (let i = items.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [items[i], items[j]] = [items[j], items[i]];
-            }
-            // Re-append shuffled items to the DOM
-            items.forEach(item => list.appendChild(item));
-        });
-        saveListsToStorage(); // Persist the new order
-        status.textContent = "Lists have been shuffled.";
-        setTimeout(() => status.textContent = '', 2000);
-    }
-
-    function readAllItems() {
-        const allItems = allLists.flatMap(list => 
-            Array.from(list.children).map(li => li.querySelector('.item-text').textContent)
-        );
-
-        if (allItems.length === 0) {
-            alert('There are no items to read.');
-            return;
-        }
-
-        let currentIndex = 0;
-        function speakNext() {
-            if (currentIndex < allItems.length) {
-                const text = allItems[currentIndex];
-                currentIndex++;
-                // Use the onEnd callback to create a chain of speech
-                speakText(text, speakNext); 
-            }
-        }
-        speakNext();
-    }
-
-    function exportListsAsTxt() {
-        const data = {
-            vocabulary: Array.from(vocabularyList.children).map(li => li.querySelector('.item-text').textContent),
-            phrases: Array.from(phraseList.children).map(li => li.querySelector('.item-text').textContent),
-            sentences: Array.from(sentenceList.children).map(li => li.querySelector('.item-text').textContent)
-        };
-
-        if (data.vocabulary.length === 0 && data.phrases.length === 0 && data.sentences.length === 0) {
-            alert('There is nothing to export.');
-            return;
-        }
-
-        let content = [
-            '--- Vocabulary ---\r\n' + data.vocabulary.join('\r\n'),
-            '--- Phrases ---\r\n' + data.phrases.join('\r\n'),
-            '--- Sentences ---\r\n' + data.sentences.join('\r\n')
-        ].filter(section => !section.endsWith('---\r\n')).join('\r\n\r\n');
-
-        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'dictation-list.txt';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }
-
-    // --- Local Storage Persistence ---
-    function saveListsToStorage() {
-        const dataToSave = {
-            vocabulary: Array.from(vocabularyList.children).map(li => li.querySelector('.item-text').textContent),
-            phrases: Array.from(phraseList.children).map(li => li.querySelector('.item-text').textContent),
-            sentences: Array.from(sentenceList.children).map(li => li.querySelector('.item-text').textContent)
-        };
-        localStorage.setItem(LIST_STORAGE_KEY, JSON.stringify(dataToSave));
-    }
-
-    function loadListsFromStorage() {
-        const storedData = localStorage.getItem(LIST_STORAGE_KEY);
-        if (!storedData) return;
-
-        try {
-            const data = JSON.parse(storedData);
-            
-            allLists.forEach(list => list.innerHTML = ''); // Clear lists before loading
-
-            data.vocabulary?.forEach(text => vocabularyList.appendChild(createVocabularyListItem(text)));
-            data.phrases?.forEach(text => phraseList.appendChild(createVocabularyListItem(text)));
-            data.sentences?.forEach(text => sentenceList.appendChild(createVocabularyListItem(text)));
-
-            // After loading, ensure the UI state is correct
-            updateUIForSetup();
-
-        } catch (e) {
-            console.error("Failed to parse lists from localStorage. Clearing corrupted data.", e);
-            localStorage.removeItem(LIST_STORAGE_KEY);
-        }
-    }
-
-    // --- Rate Management ---
-    function saveRateToStorage() {
-        localStorage.setItem(RATE_STORAGE_KEY, rateSlider.value);
-    }
-
-    function loadRateFromStorage() {
-        const savedRate = localStorage.getItem(RATE_STORAGE_KEY) || '1.0';
-        rateSlider.value = savedRate;
-        rateValueDisplay.textContent = `${parseFloat(savedRate).toFixed(1)}x`;
-    }
-
-    // --- Pitch Management ---
-    function savePitchToStorage() {
-        localStorage.setItem(PITCH_STORAGE_KEY, pitchSlider.value);
-    }
-
-    function loadPitchFromStorage() {
-        const savedPitch = localStorage.getItem(PITCH_STORAGE_KEY) || '1.0';
-        pitchSlider.value = savedPitch;
-        pitchValueDisplay.textContent = `${parseFloat(savedPitch).toFixed(1)}`;
-    }
-
-
-    // --- Dictation Flow ---
-    function startDictation() {
-        // Add any pending items from the input fields before starting
-        addAllVocabularyItems();
-
-        // First, reset the visual state of all lists for the dictation
-        allLists.forEach(list => {
-            // Re-apply 'masked' to all items to blur them
-            list.querySelectorAll('li').forEach(li => li.classList.add('masked'));
-        });
-
-        dictationItems = allLists.flatMap(list => 
-            Array.from(list.children).map(li => li.querySelector('.item-text').textContent)
-        );
-
-        if (dictationItems.length === 0) {
-            alert('Please add some vocabulary, phrases, or sentences to practice.');
-            return;
-        }
-
-
-        currentDictationIndex = 0;
-        updateUIForDictation();
-        // The dictation will now wait for the user to press "Replay" or "Next"
-    }
-
-    function speakCurrentItem() {
-        if (currentDictationIndex < 0 || currentDictationIndex >= dictationItems.length) {
-            return; // Should not happen
-        }
-        const text = dictationItems[currentDictationIndex];
-        speakText(text, () => {
-            // The flow now waits for the user to click "Next"
-        });
-    }
-
-    function nextItem() {
-        currentDictationIndex++;
-        if (currentDictationIndex < dictationItems.length) {
-            speakCurrentItem();
-        } else {
-            endDictation();
-        }
-    }
-
-    function endDictation() {
-        status.textContent = "Dictation complete! Well done.";
-        setTimeout(() => status.textContent = '', 3000);
-        updateUIForSetup();
-        revealAllAnswers(); // Automatically show all answers at the end
-    }
-
-    // --- Theme Management ---
-    function applyTheme(theme) {
-        document.body.dataset.theme = theme;
-        localStorage.setItem(THEME_STORAGE_KEY, theme);
-    }
-
-    function loadTheme() {
-        const savedTheme = localStorage.getItem(THEME_STORAGE_KEY) || 'default';
-        if (themeSelect) {
-            themeSelect.value = savedTheme;
-        }
-        applyTheme(savedTheme);
-    }
-    // --- Initialization and Event Listeners ---
-    function init() {
-        // Check for browser support
-        if (!('speechSynthesis' in window)) {
-            status.textContent = "Sorry, your browser doesn't support text-to-speech.";
-            [speakButton, voiceSelect, addButton, vocabularyInput].forEach(el => el.disabled = true);
-            return;
-        }
-
-        // Load voices
-        if (synth.getVoices().length > 0) {
-            populateVoiceList();
-        } else {
-            synth.onvoiceschanged = populateVoiceList;
-        }
-
-        // Load saved theme
-        loadTheme();
-
-        // Load saved rate
-        loadRateFromStorage();
-
-        // Load saved pitch
-        loadPitchFromStorage();
-
-        // Load any saved lists from the last session
-        loadListsFromStorage();
-
-        // Attach event listeners
-        addButton.addEventListener('click', addNewInputLine);
-
-        multiInputContainer.addEventListener('keydown', (e) => {
-            if (!e.target.matches('.vocabulary-input')) return;
-
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // Prevent new line on Enter
-                
-                const allInputs = Array.from(multiInputContainer.querySelectorAll('.vocabulary-input'));
-                const currentIndex = allInputs.indexOf(e.target);
-
-                if (currentIndex > -1 && currentIndex < allInputs.length - 1) {
-                    // If not the last input, move to the next one
-                    allInputs[currentIndex + 1].focus();
-                } else {
-                    // If it's the last input, add a new line, mimicking the '+' button
-                    addNewInputLine();
-                }
-            }
-        });
-
-        multiInputContainer.addEventListener('click', (e) => {
-            if (e.target.matches('.pronounce-input-button')) {
-                const inputField = e.target.previousElementSibling;
-                if (inputField && inputField.matches('.vocabulary-input')) {
-                    const text = inputField.value.trim();
-                    if (text) {
-                        speakText(text, null);
-                    }
-                }
-            }
-        });
-
-        // Use event delegation for delete buttons
-        const categorizedLists = document.getElementById('categorized-lists');
-        categorizedLists.addEventListener('click', (e) => {
-            if (e.target.matches('.delete-item-btn')) {
-                const itemToDelete = e.target.closest('li');
-                if (itemToDelete) {
-                    // Get the text to display in the confirmation dialog
-                    const text = itemToDelete.querySelector('.item-text')?.textContent || 'this item';
-                    if (window.confirm(`Are you sure you want to delete "${text}"?`)) {
-                        itemToDelete.remove();
-                        saveListsToStorage(); // Persist the change only if confirmed
-                    }
-                }
-            }
-        });
-
-        speakButton.addEventListener('click', startDictation);
-
-
-        replayButton.addEventListener('click', speakCurrentItem);
-        clearAllButton.addEventListener('click', clearAllLists);
-        shuffleButton.addEventListener('click', shuffleAllLists);
-        readAllButton.addEventListener('click', readAllItems);
-        exportButton.addEventListener('click', exportListsAsTxt);
-
-        nextButton.addEventListener('click', nextItem);
-
-        rateSlider.addEventListener('input', () => {
-            // Update the display and format to one decimal place
-            rateValueDisplay.textContent = `${parseFloat(rateSlider.value).toFixed(1)}x`;
-            saveRateToStorage(); // Save on change
-
-            // If speech is active, restart it with the new parameters
-            if (synth.speaking && lastSpokenUtterance.text) {
-                speakText(lastSpokenUtterance.text, lastSpokenUtterance.onEnd);
-            }
-        });
-
-        pitchSlider.addEventListener('input', () => {
-            pitchValueDisplay.textContent = `${parseFloat(pitchSlider.value).toFixed(1)}`;
-            savePitchToStorage();
-
-            // If speech is active, restart it with the new parameters
-            if (synth.speaking && lastSpokenUtterance.text) {
-                speakText(lastSpokenUtterance.text, lastSpokenUtterance.onEnd);
-            }
-        });
-
-        themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
-    }
-
-    init();
-});
-    }
-
-    function updateUIForDictation() {
-        // Loop through all the items, mask entered text and hide empty lines
-        const inputFields = multiInputContainer.querySelectorAll('.input-with-button');
-        inputFields.forEach(input => {
-          const textarea = input.querySelector('.vocabulary-input');
-          const text = textarea.value.trim();
-          textarea.classList.toggle('masked', !!text);
-          input.classList.toggle('hidden', !text);
-        });
-
-        vocabularyInputArea.style.display = 'block';
-        addButton.disabled = true; // Disable the '+' button during dictation
-        speakButton.style.display = 'none';
- 
