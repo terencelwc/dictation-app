@@ -30,6 +30,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
     /* A gradient background makes the glass effect visible and appealing */
     background: var(--bg-gradient);
     background-attachment: fixed; /* Ensures the gradient stays in place on scroll */
@@ -37,6 +38,7 @@ body {
     margin: 0;
     transition: background 0.5s ease;
 }
+
 
 .theme-switcher {
     position: absolute;
@@ -68,19 +70,22 @@ body {
     padding: 40px 50px;
     border-radius: 16px; /* More rounded corners */
     width: 100%;
-    max-width: 650px; /* Slightly wider */
+    max-width: 720px; /* Wider for more space */
     text-align: center;
     position: relative; /* For positioning the theme switcher */
 }
 
 h1 {
     color: var(--text-primary);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font-size: 2.5rem; /* Larger heading */
 }
 
 p {
     color: var(--text-secondary); /* Darker text for better contrast */
-    margin-bottom: 30px;
+    margin-bottom: 35px;
+    font-size: 1.1rem; /* Slightly larger for readability */
+    line-height: 1.6;
 }
 
 .status-message {
@@ -210,6 +215,7 @@ button {
     box-shadow: 0 4px 15px var(--button-primary-shadow); /* Add a subtle shadow to the button */
 }
 
+
 button:hover:not(:disabled) {
     background-color: var(--button-primary-hover-bg);
     box-shadow: 0 6px 20px var(--button-primary-hover-shadow);
@@ -227,12 +233,29 @@ button:disabled {
     box-shadow: none;
 }
 
+.list-actions button {
+    /* Make buttons circular and try to fit text */
+
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+    text-align: center;
+    word-break: break-word; /* Helps with longer text */
+    color: white; /* Ensure text is white */
+
+}
+
 .button-secondary {
     background-color: var(--button-secondary-bg);
     box-shadow: 0 4px 15px var(--button-secondary-shadow);
 }
 
 .button-secondary:hover:not(:disabled) {
+
     background-color: var(--button-secondary-hover-bg);
     box-shadow: 0 6px 20px var(--button-secondary-hover-shadow);
 }
@@ -252,7 +275,8 @@ button:disabled {
     display: flex;
     gap: 10px;
     align-items: center; /* Align items vertically */
-   }
+}
+
 
 .input-with-button textarea {
     flex-grow: 1; /* Allows the textarea to take up the available space */
@@ -260,6 +284,11 @@ button:disabled {
     padding-top: 14px;
     padding-bottom: 14px;
     line-height: 1.5; /* Better for single-line textareas */
+}
+
+.input-with-button textarea.masked {
+    color: transparent;
+    text-shadow: 0 0 8px var(--text-placeholder); /* Creates a nice masking effect */
 }
 
 /* Override general button styles for the round '+' add button */
@@ -311,118 +340,19 @@ button:disabled {
     margin-top: 15px;
 }
 
-/* Styling for the categorized item lists (Vocabulary, Phrases, Sentences) */
-.item-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0; /* Space below the list */
-    max-height: 150px; /* Give it a max height and scrollbar if needed */
-    overflow-y: auto;
-    border-radius: 8px;
-    background: var(--list-bg);
-    border: 1px solid var(--list-border);
-}
-
-.item-list li {    
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border-bottom: 1px solid var(--list-item-border);
-    color: var(--text-primary);
-    font-size: 15px;
-}
-
-#playback-controls button {
-    width: auto;
-    flex-grow: 1; /* Make buttons share available space */
-}
-
-.item-list li.masked {
-    color: transparent;
-}
-
-.item-list li:last-child {
-    border-bottom: none;
-}
-
-.delete-item-btn {
-    background: none;
-    border: none;
-    color: var(--button-secondary-bg);
-    cursor: pointer;
-    font-size: 22px;
-    font-weight: bold;
-    padding: 0 5px;
-    line-height: 1;
-    opacity: 0.5;
-    transition: opacity 0.2s, transform 0.2s;
-}
-
-.delete-item-btn:hover {
-    opacity: 1;
-    transform: scale(1.1);
-}
-
 .list-actions {
     display: flex;
     justify-content: center;
     gap: 15px;
+
+    width: 100%;
+    justify-content: space-around;
     margin-top: 20px;
     margin-bottom: 20px;
 }
 
-.list-actions button {
-    width: auto;
-    padding: 12px 25px;
-    color: white;
-}
-
-#categorized-lists {
-    display: flex;
-    gap: 20px;
-    text-align: left;
-}
-
-.category-container {
-    flex: 1;
-}
-
-.category-container h3 {
-    margin-bottom: 10px;
-    color: var(--text-secondary);
-}
-
-.category-container ul {
-    list-style: none;
-    padding: 0;
-}
-
-.category-container li {
-    display: flex;
-    align-items: center;
-    padding: 8px 10px;
-    margin-bottom: 5px;
-    border-bottom: 1px solid var(--list-item-border);
-}
-
-.category-container li input[type="checkbox"] {
-    margin-right: 10px;
-}
-
-.category-container li button {
-    padding: 5px 10px;
-    font-size: 14px;
-    width: auto;
-}
-
-#dictation-practice-area {
-    margin-top: 20px;
-}
-
-#user-dictation-input {
-    text-align: center;
-    font-size: 18px;
+.input-with-button.hidden {
+    display: none;
 }
 
 .dictation-controls {

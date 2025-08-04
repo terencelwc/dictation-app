@@ -72,45 +72,20 @@
                         <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
                     </div>
                 </div>
+
                 <div class="add-button-container">
                     <button id="add-button" type="button" title="Add all non-empty items to lists">+</button>
                 </div>
             </div>
 
-            <div id="categorized-lists">
-                <div class="category-container">
-                    <ul id="vocabulary-list" class="item-list">
-                        <!-- Vocabulary items will be added here -->
-                    </ul>
-                </div>
-
-                <div class="category-container">
-                    <ul id="phrase-list" class="item-list">
-                        <!-- Phrase items will be added here -->
-                    </ul>
-                </div>
-
-                <div class="category-container">
-                    <ul id="sentence-list" class="item-list">
-                        <!-- Sentence items will be added here -->
-                    </ul>
-                </div>
+  <div class="list-actions">
+                <button id="speak-button" >Start Dictation</button>
+                <button id="shuffle-button" class="button-secondary">Shuffle</button>
+                <button id="read-all-button" class="button-tertiary">Read All</button>
+                <button id="show-answers-button" class="button-tertiary">Show Answers</button>
+                <button id="export-button" class="button-secondary">Export as .txt</button>
+                <button id="reset-button" class="button-secondary">Reset</button>
             </div>
-
-            <div class="list-actions">
-                <button id="clear-all-button" class="button-secondary">Clear All Lists</button>
-                <button id="show-answers-button" class="button-secondary" style="display: none;">Reveal Next Answer</button>
-            </div>
-
-            <!-- This area is for the dictation playback controls, hidden by default -->
-            <div id="playback-controls" style="display: none;">
-                <div class="dictation-controls">
-                    <button id="replay-button">Replay Word</button>
-                    <button id="next-button">Next Word</button>
-                </div>
-            </div>
-
-            <button id="speak-button">Start Dictation</button>
         </div>
     </main>
     <script src="script.js"></script>
