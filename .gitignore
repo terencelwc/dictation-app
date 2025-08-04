@@ -1,0 +1,5 @@
+# VS Code specific
+.vscode/
+
+# macOS specific
+.DS_Store
