@@ -1,0 +1,533 @@
+:root {
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --container-bg: rgba(255, 255, 255, 0.3);
+    --container-border: rgba(255, 255, 255, 0.18);
+    --text-primary: #2c3e50;
+    --text-secondary: #34495e;
+    --text-placeholder: #7f8c8d;
+    --text-on-primary-btn: white;
+    --status-color: #c0392b;
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --input-focus-bg: rgba(255, 255, 255, 0.8);
+    --input-border: rgba(44, 62, 80, 0.3);
+    --input-focus-border: #3498db;
+    --list-bg: rgba(255, 255, 255, 0.2);
+    --list-border: rgba(255, 255, 255, 0.1);
+    --list-item-border: rgba(44, 62, 80, 0.1);
+    --button-primary-bg: #3498db;
+    --button-primary-hover-bg: #2980b9;
+    --button-primary-shadow: rgba(52, 152, 219, 0.3);
+    --button-primary-hover-shadow: rgba(41, 128, 185, 0.4);
+    --button-secondary-bg: #e74c3c;
+    --button-secondary-hover-bg: #c0392b;
+    --button-secondary-shadow: rgba(231, 76, 60, 0.3);
+    --button-secondary-hover-shadow: rgba(192, 57, 43, 0.4);
+    --button-tertiary-bg: #2ecc71;
+    --button-tertiary-hover-bg: #27ae60;
+    --button-tertiary-shadow: rgba(46, 204, 113, 0.3);
+    --button-tertiary-hover-shadow: rgba(39, 174, 96, 0.4);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    /* A gradient background makes the glass effect visible and appealing */
+    background: var(--bg-gradient);
+    background-attachment: fixed; /* Ensures the gradient stays in place on scroll */
+    color: var(--text-secondary);
+    margin: 0;
+    transition: background 0.5s ease;
+}
+
+.theme-switcher {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.main-content {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px; /* Increased padding for better spacing */
+    box-sizing: border-box;
+}
+
+.container {
+    /* --- Glassmorphism Effect --- */
+    background: var(--container-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--container-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+
+    padding: 40px 50px;
+    border-radius: 16px; /* More rounded corners */
+    width: 100%;
+    max-width: 650px; /* Slightly wider */
+    text-align: center;
+    position: relative; /* For positioning the theme switcher */
+}
+
+h1 {
+    color: var(--text-primary);
+    margin-bottom: 10px;
+}
+
+p {
+    color: var(--text-secondary); /* Darker text for better contrast */
+    margin-bottom: 30px;
+}
+
+.status-message {
+    color: var(--status-color); /* Slightly darker red for better contrast */
+    margin-bottom: 20px;
+    font-weight: bold;
+    min-height: 1.2em;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block; /* Default display for labels */
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Specific flex layout for the rate slider's label to align text and value */
+label[for$="-slider"] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slider-value-display {
+    font-weight: 400;
+    font-size: 0.9em;
+    background-color: var(--list-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+}
+
+textarea,
+select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--input-border);
+    font-size: 16px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.3s, background-color 0.3s;
+    background-color: var(--input-bg); /* Semi-transparent inputs */
+    color: var(--text-primary);
+}
+
+.theme-switcher select {
+    padding: 5px 8px;
+    border-radius: 6px;
+    width: auto;
+    font-size: 14px;
+}
+
+textarea::placeholder {
+    color: var(--text-placeholder);
+}
+
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    background-color: var(--input-focus-bg);
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* --- Custom Slider Styles --- */
+input[type="range"] {
+    -webkit-appearance: none; /* Hides the slider so custom styles can be applied */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 8px; /* Specified height */
+    background: var(--input-bg); /* Track background */
+    outline: none; /* Remove outline */
+    border-radius: 4px;
+    border: 1px solid var(--input-border);
+    transition: opacity .2s;
+    cursor: pointer;
+}
+
+/* --- Slider Thumb (the draggable circle) --- */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--button-primary-bg);
+    border-radius: 50%;
+    border: 2px solid var(--container-bg);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+    margin-top: -7px; /* Vertically center the thumb on the track */
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--button-primary-bg);
+    border-radius: 50%;
+    border: 2px solid var(--container-bg);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb, input[type="range"]:hover::-moz-range-thumb {
+    background: var(--button-primary-hover-bg);
+}
+
+button {
+    background-color: var(--button-primary-bg);
+    color: var(--text-on-primary-btn);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+    width: 100%;
+    box-shadow: 0 4px 15px var(--button-primary-shadow); /* Add a subtle shadow to the button */
+}
+
+button:hover:not(:disabled) {
+    background-color: var(--button-primary-hover-bg);
+    box-shadow: 0 6px 20px var(--button-primary-hover-shadow);
+    transform: translateY(-2px); /* Add a slight lift on hover */
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0) scale(0.98); /* Combine transforms for a press effect */
+    box-shadow: 0 2px 10px rgba(41, 128, 185, 0.3);
+}
+
+button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.button-secondary {
+    background-color: var(--button-secondary-bg);
+    box-shadow: 0 4px 15px var(--button-secondary-shadow);
+}
+
+.button-secondary:hover:not(:disabled) {
+    background-color: var(--button-secondary-hover-bg);
+    box-shadow: 0 6px 20px var(--button-secondary-hover-shadow);
+}
+
+.button-tertiary {
+    background-color: var(--button-tertiary-bg); /* A green color for a positive action */
+    box-shadow: 0 4px 15px var(--button-tertiary-shadow);
+}
+
+.button-tertiary:hover:not(:disabled) {
+    background-color: var(--button-tertiary-hover-bg);
+    box-shadow: 0 6px 20px var(--button-tertiary-hover-shadow);
+}
+
+/* Styles for the vocabulary input area */
+.input-with-button {
+    display: flex;
+    gap: 10px;
+    align-items: center; /* Align items vertically */
+   }
+
+.input-with-button textarea {
+    flex-grow: 1; /* Allows the textarea to take up the available space */
+    /* The rows="1" in HTML will make it thin, but let's ensure it behaves well */
+    padding-top: 14px;
+    padding-bottom: 14px;
+    line-height: 1.5; /* Better for single-line textareas */
+}
+
+/* Override general button styles for the round '+' add button */
+#add-button {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0; /* Prevent the button from shrinking */
+    padding: 0;
+    font-size: 30px; /* Make the '+' symbol larger */
+    font-weight: 300; /* A thinner plus sign can look more modern */
+    border-radius: 50%; /* Make it a circle */
+    line-height: 1; /* Helps with vertical alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* New styles for the pronounce button */
+.pronounce-input-button {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    padding: 0;
+    font-size: 16px;
+    border-radius: 50%;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--button-tertiary-bg);
+    box-shadow: 0 4px 15px var(--button-tertiary-shadow);
+}
+
+.pronounce-input-button:hover:not(:disabled) {
+    background-color: var(--button-tertiary-hover-bg);
+    box-shadow: 0 6px 20px var(--button-tertiary-hover-shadow);
+}
+
+/* Container for the multiple input rows */
+#multi-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* A little space between input rows */
+}
+
+.add-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+/* Styling for the categorized item lists (Vocabulary, Phrases, Sentences) */
+.item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0; /* Space below the list */
+    max-height: 150px; /* Give it a max height and scrollbar if needed */
+    overflow-y: auto;
+    border-radius: 8px;
+    background: var(--list-bg);
+    border: 1px solid var(--list-border);
+}
+
+.item-list li {    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--list-item-border);
+    color: var(--text-primary);
+    font-size: 15px;
+}
+
+#playback-controls button {
+    width: auto;
+    flex-grow: 1; /* Make buttons share available space */
+}
+
+.item-list li.masked {
+    color: transparent;
+}
+
+.item-list li:last-child {
+    border-bottom: none;
+}
+
+.delete-item-btn {
+    background: none;
+    border: none;
+    color: var(--button-secondary-bg);
+    cursor: pointer;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 0 5px;
+    line-height: 1;
+    opacity: 0.5;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.delete-item-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.list-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.list-actions button {
+    width: auto;
+    padding: 12px 25px;
+    color: white;
+}
+
+#categorized-lists {
+    display: flex;
+    gap: 20px;
+    text-align: left;
+}
+
+.category-container {
+    flex: 1;
+}
+
+.category-container h3 {
+    margin-bottom: 10px;
+    color: var(--text-secondary);
+}
+
+.category-container ul {
+    list-style: none;
+    padding: 0;
+}
+
+.category-container li {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--list-item-border);
+}
+
+.category-container li input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.category-container li button {
+    padding: 5px 10px;
+    font-size: 14px;
+    width: auto;
+}
+
+#dictation-practice-area {
+    margin-top: 20px;
+}
+
+#user-dictation-input {
+    text-align: center;
+    font-size: 18px;
+}
+
+.dictation-controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* --- THEME DEFINITIONS --- */
+
+body[data-theme="academic"] {
+    --bg-gradient: linear-gradient(135deg, #e0c9a6 0%, #a98e71 100%);
+    --container-bg: rgba(245, 245, 220, 0.3); /* beige */
+    --container-border: rgba(245, 245, 220, 0.2);
+    --text-primary: #4a3f35; /* dark brown */
+    --text-secondary: #6b5b4b;
+    --input-bg: rgba(245, 245, 220, 0.4);
+    --input-border: rgba(74, 63, 53, 0.4);
+    --input-focus-border: #8B4513;
+    --button-primary-bg: #8B4513; /* saddle brown */
+    --button-primary-hover-bg: #6e3710;
+    --button-primary-shadow: rgba(139, 69, 19, 0.3);
+    --button-primary-hover-shadow: rgba(139, 69, 19, 0.4);
+}
+
+body[data-theme="forest"] {
+    --bg-gradient: linear-gradient(135deg, #618866 0%, #2f4f4f 100%);
+    --container-bg: rgba(255, 255, 255, 0.15);
+    --container-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #f0fff0; /* honeydew */
+    --text-secondary: #d3e0d3;
+    --text-on-primary-btn: #f0fff0;
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --input-border: rgba(240, 255, 240, 0.3);
+    --input-focus-border: #8fbc8f;
+    --list-bg: rgba(0, 0, 0, 0.1);
+    --button-primary-bg: #556b2f; /* dark olive green */
+    --button-primary-hover-bg: #455726;
+    --button-primary-shadow: rgba(85, 107, 47, 0.3);
+    --button-primary-hover-shadow: rgba(85, 107, 47, 0.4);
+}
+
+body[data-theme="architecture"] {
+    --bg-gradient: linear-gradient(135deg, #6c757d 0%, #343a40 100%);
+    --container-bg: rgba(255, 255, 255, 0.1);
+    --container-border: rgba(255, 255, 255, 0.15);
+    --text-primary: #f8f9fa;
+    --text-secondary: #ced4da;
+    --text-on-primary-btn: white;
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --input-border: rgba(248, 249, 250, 0.3);
+    --input-focus-border: #007bff;
+    --list-bg: rgba(0, 0, 0, 0.15);
+    --button-primary-bg: #007bff; /* sharp blue */
+    --button-primary-hover-bg: #0069d9;
+    --button-primary-shadow: rgba(0, 123, 255, 0.3);
+    --button-primary-hover-shadow: rgba(0, 123, 255, 0.4);
+}
+
+body[data-theme="cartoon"] {
+    --bg-gradient: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+    --container-bg: rgba(255, 255, 255, 0.6);
+    --container-border: rgba(255, 255, 255, 0.4);
+    --text-primary: #d63384; /* pink */
+    --text-secondary: #e85a9b;
+    --text-on-primary-btn: #495057;
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --input-border: rgba(214, 51, 132, 0.3);
+    --input-focus-border: #ffc107;
+    --button-primary-bg: #ffc107; /* yellow */
+    --button-primary-hover-bg: #ffb300;
+    --button-primary-shadow: rgba(255, 193, 7, 0.3);
+    --button-primary-hover-shadow: rgba(255, 193, 7, 0.4);
+}
+
+body[data-theme="technology"] {
+    --bg-gradient: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    --container-bg: rgba(0, 255, 255, 0.08);
+    --container-border: rgba(0, 255, 255, 0.2);
+    --text-primary: #00e5ff; /* cyan */
+    --text-secondary: #97dffc;
+    --text-on-primary-btn: #0f2027;
+    --input-bg: rgba(0, 255, 255, 0.05);
+    --input-border: rgba(0, 229, 255, 0.3);
+    --input-focus-border: #00e5ff;
+    --list-bg: rgba(0, 0, 0, 0.2);
+    --button-primary-bg: #00bfff; /* deep sky blue */
+    --button-primary-hover-bg: #00a6dd;
+    --button-primary-shadow: rgba(0, 191, 255, 0.3);
+    --button-primary-hover-shadow: rgba(0, 191, 255, 0.4);
+}
+
+body[data-theme="marine"] {
+    --bg-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+    --container-bg: rgba(255, 255, 255, 0.25);
+    --container-border: rgba(255, 255, 255, 0.2);
+    --text-primary: #00394d; /* dark teal */
+    --text-secondary: #005f7a;
+    --text-on-primary-btn: white;
+    --input-bg: rgba(255, 255, 255, 0.2);
+    --input-border: rgba(0, 57, 77, 0.3);
+    --input-focus-border: #ff8c00;
+    --button-primary-bg: #ff8c00; /* dark orange */
+    --button-primary-hover-bg: #e67e00;
+    --button-primary-shadow: rgba(255, 140, 0, 0.3);
+    --button-primary-hover-shadow: rgba(255, 140, 0, 0.4);
+}
+
+#vocabulary-input {
+    width: 100%;
+}

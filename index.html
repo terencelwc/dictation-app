@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictation Practice (Chinese & English)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body data-theme="default">
+    <main class="main-content">
+        <div class="container">
+            <div class="theme-switcher">
+                <select id="theme-select" title="Choose a theme">
+                    <option value="default">Default</option>
+                    <option value="academic">Academic</option>
+                    <option value="forest">Forest</option>
+                    <option value="architecture">Architecture</option>
+                    <option value="cartoon">Cartoon</option>
+                    <option value="technology">Technology</option>
+                    <option value="marine">Marine</option>
+                </select>
+            </div>
+            <h1>Dictation Practice</h1>
+            <p>Add items to the list, select a voice, and click "Start Dictation" to begin.</p>
+            
+            <div id="status" class="status-message"></div>
+
+            <div class="form-group">
+                <label for="voice-select">Choose a Voice:</label>
+                <select id="voice-select"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="rate-slider">Speech Rate: <span id="rate-value-display" class="slider-value-display">1.0x</span></label>
+                <input type="range" id="rate-slider" min="0.1" max="2" step="0.1" value="1" title="Adjust speech rate">
+            </div>
+
+            <div class="form-group">
+                <label for="pitch-slider">Speech Pitch: <span id="pitch-value-display" class="slider-value-display">1.0</span></label>
+                <input type="range" id="pitch-slider" min="0" max="2" step="0.1" value="1" title="Adjust speech pitch">
+            </div>
+
+            <div id="vocabulary-input-area" class="form-group">
+                <label>Enter Vocabulary/Sentences:</label>
+                <div id="multi-input-container">
+                    <div class="input-with-button">
+                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 1..."></textarea>
+                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                    </div>
+                    <div class="input-with-button">
+                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 2..."></textarea>
+                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                    </div>
+                    <div class="input-with-button">
+                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 3..."></textarea>
+                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                    </div>
+                    <div class="input-with-button">
+                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 4..."></textarea>
+                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                    </div>
+                    <div class="input-with-button">
+                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 5..."></textarea>
+                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                    </div>
+                    <div class="input-with-button">
+                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 6..."></textarea>
+                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                    </div>
+                </div>
+                <div class="add-button-container">
+                    <button id="add-button" type="button" title="Add all non-empty items to lists">+</button>
+                </div>
+            </div>
+
+            <div id="categorized-lists">
+                <div class="category-container">
+                    <ul id="vocabulary-list" class="item-list">
+                        <!-- Vocabulary items will be added here -->
+                    </ul>
+                </div>
+
+                <div class="category-container">
+                    <ul id="phrase-list" class="item-list">
+                        <!-- Phrase items will be added here -->
+                    </ul>
+                </div>
+
+                <div class="category-container">
+                    <ul id="sentence-list" class="item-list">
+                        <!-- Sentence items will be added here -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="list-actions">
+                <button id="clear-all-button" class="button-secondary">Clear All Lists</button>
+                <button id="show-answers-button" class="button-secondary" style="display: none;">Reveal Next Answer</button>
+            </div>
+
+            <!-- This area is for the dictation playback controls, hidden by default -->
+            <div id="playback-controls" style="display: none;">
+                <div class="dictation-controls">
+                    <button id="replay-button">Replay Word</button>
+                    <button id="next-button">Next Word</button>
+                </div>
+            </div>
+
+            <button id="speak-button">Start Dictation</button>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
