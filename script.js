@@ -25,9 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendFeedbackBtn = document.getElementById('send-feedback-btn');
     const feedbackTextarea = document.getElementById('feedback-textarea');
 
+    const meaningModal = document.getElementById('meaning-modal');
+    const meaningText = document.getElementById('meaning-text');
     // --- State Management ---
     const synth = window.speechSynthesis;
     const LIST_STORAGE_KEY = 'dictationAppLists';
+    const VOCAB_LIST_STORAGE_KEY = 'dictationAppVocabList';
     const THEME_STORAGE_KEY = 'dictationAppTheme';
     const RATE_STORAGE_KEY = 'dictationAppRate';
     const PITCH_STORAGE_KEY = 'dictationAppPitch';
@@ -89,16 +92,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
         utterance.onerror = (event) => {
-            // The 'canceled' error is expected when we interrupt speech to change parameters.
-            // We don't want to show this expected error to the user.
-            if (event.error === 'canceled') {
-                console.log('Speech was canceled intentionally.');
+            // Some browsers (like Safari) can be stricter and throw errors like 'interrupted'
+            // or 'canceled' during normal operation (e.g., clicking another play button quickly).
+            // We will treat these as non-fatal and not reset the UI.
+            const nonFatalErrors = ['canceled', 'interrupted'];
+            // Make the check case-insensitive to be more robust across browsers
+            if (event.error && nonFatalErrors.includes(event.error.toLowerCase())) {
+                console.log(`Speech interrupted as expected: ${event.error}`);
+                lastSpokenUtterance = { text: null, onEnd: null };
                 return;
             }
+
+            // For all other, unexpected errors:
             console.error('SpeechSynthesisUtterance.onerror', event);
             status.textContent = `An error occurred during speech: ${event.error}`;
             lastSpokenUtterance = { text: null, onEnd: null };
-            setInitialUIState(); // Reset UI on error
+            // Do not reset the entire UI on a single speech error. Let the user continue.
         };
 
         synth.speak(utterance);
@@ -128,6 +137,17 @@ document.addEventListener('DOMContentLoaded', () => {
         resetButton.disabled = false;
     }
 
+    function setReviewUIState() {
+        speakButton.disabled = false; // Allow starting over
+        addButton.disabled = false;   // Allow adding more items
+
+        shuffleButton.disabled = true;
+        readAllButton.disabled = true;
+        showAnswersButton.disabled = true; // Already shown
+        exportButton.disabled = false;     // Still useful
+        resetButton.disabled = false;      // Still useful
+    }
+
     // --- Vocabulary & List Management ---
     function addNewInputLine() {
         const newRow = document.createElement('div');
@@ -136,11 +156,13 @@ document.addEventListener('DOMContentLoaded', () => {
         newRow.innerHTML = `
             <textarea class="vocabulary-input" rows="1" placeholder="Enter another item..."></textarea>
             <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+            <button class="search-button" type="button" title="Search meaning">🔍</button>
         `;
     
         multiInputContainer.appendChild(newRow);
         // Focus the newly created textarea
         newRow.querySelector('.vocabulary-input').focus();
+    saveListToStorage();
     }
 
     function showAnswers() {
@@ -149,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
             textarea.classList.remove('masked');
             textarea.readOnly = false;
         });
-        showAnswersButton.disabled = true; // Can only show answers once
+        setReviewUIState();
     }
 
     function resetApp() {
@@ -166,10 +188,46 @@ document.addEventListener('DOMContentLoaded', () => {
             newRow.innerHTML = `
                 <textarea class="vocabulary-input" rows="1" placeholder="Enter item ${i}..."></textarea>
                 <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                <button class="search-button" type="button" title="Search meaning">🔍</button>
             `;
             multiInputContainer.appendChild(newRow);
         }
         setInitialUIState();
+        localStorage.removeItem(VOCAB_LIST_STORAGE_KEY);
+    }
+
+    // --- List Storage ---
+    function saveListToStorage() {
+        const allItems = Array.from(multiInputContainer.querySelectorAll('.vocabulary-input'))
+            .map(textarea => textarea.value);
+        localStorage.setItem(VOCAB_LIST_STORAGE_KEY, JSON.stringify(allItems));
+    }
+
+    function loadListFromStorage() {
+        const savedListJSON = localStorage.getItem(VOCAB_LIST_STORAGE_KEY);
+        if (!savedListJSON) return;
+
+        const savedList = JSON.parse(savedListJSON);
+        
+        if (Array.isArray(savedList) && savedList.length > 0) {
+            multiInputContainer.innerHTML = ''; // Clear default inputs
+
+            // Ensure at least 6 lines are displayed
+            const numLines = Math.max(savedList.length, 6);
+
+            for (let i = 0; i < numLines; i++) {
+                const itemText = savedList[i] || '';
+                const newRow = document.createElement('div');
+                newRow.className = 'input-with-button';
+                newRow.innerHTML = `
+                    <textarea class="vocabulary-input" rows="1" placeholder="Enter item ${i + 1}..."></textarea>
+                    <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                    <button class="search-button" type="button" title="Search meaning">🔍</button>
+                `;
+                newRow.querySelector('textarea').value = itemText;
+                multiInputContainer.appendChild(newRow);
+            }
+        }
     }
 
     // --- List Actions ---
@@ -228,6 +286,77 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(link);
         URL.revokeObjectURL(url);
     }
+
+    async function getEnglishDefinition(word) {
+        // This API works best for single words. If it's a sentence, it will likely fail.
+        if (word.includes(' ')) {
+            return '<p>Definitions are only available for single words.</p>';
+        }
+        try {
+            const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+            if (!response.ok) {
+                return '<p>No definition found for this word.</p>';
+            }
+            const data = await response.json();
+            
+            // Format the definition data into HTML
+            let html = '';
+            data[0].meanings.forEach(meaning => {
+                html += `<p><strong>${meaning.partOfSpeech}</strong></p><ul>`;
+                meaning.definitions.slice(0, 3).forEach(def => { // Limit to 3 definitions
+                    html += `<li>${def.definition}</li>`;
+                });
+                html += `</ul>`;
+            });
+            return html;
+        } catch (error) {
+            console.error("Dictionary API error:", error);
+            return '<p>Could not retrieve definition.</p>';
+        }
+    }
+
+    async function getChineseTranslation(text) {
+        try {
+            const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|zh-HK`);
+            if (!response.ok) throw new Error('Translation service response was not ok.');
+            const data = await response.json();
+            if (data.responseStatus !== 200) throw new Error(data.responseDetails);
+            return `<p>${data.responseData.translatedText}</p>`;
+        } catch (error) {
+            console.error("Translation API error:", error);
+            return '<p>Could not retrieve translation.</p>';
+        }
+    }
+
+    async function showMeaning(text) {
+        meaningText.innerHTML = `Searching for: <strong>${text}</strong>...`;
+        meaningModal.style.display = 'flex';
+
+        const [definition, translation] = await Promise.all([
+            getEnglishDefinition(text),
+            getChineseTranslation(text)
+        ]);
+
+        meaningText.innerHTML = `
+            <h3>${text}</h3>
+            <h4>Definition (English):</h4>${definition}
+            <h4>Translation (Chinese):</h4>${translation}
+        `;
+    }
+
+    const closeModalMeaning = () => {
+        meaningModal.style.display = 'none';
+    };
+
+    meaningModal.querySelector('.modal-close-btn').addEventListener('click', closeModalMeaning);
+
+    meaningModal.addEventListener('click', (e) => {
+        // Close only if clicking the dark overlay, not the content box
+        if (e.target === meaningModal) {
+            closeModalMeaning();
+        }
+    });
+
 
     // --- Dictation Flow ---
     function startDictation() {
@@ -307,6 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
             synth.onvoiceschanged = populateVoiceList;
         }
 
+        loadListFromStorage();
         loadTheme();
         loadRateFromStorage();
         loadPitchFromStorage();
@@ -364,6 +494,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 3000);
         });
 
+        multiInputContainer.addEventListener('input', (e) => {
+            if (e.target.matches('.vocabulary-input')) {
+                saveListToStorage();
+            }
+        });
+
 
         multiInputContainer.addEventListener('keydown', (e) => {
             if (!e.target.matches('.vocabulary-input')) return;
@@ -382,13 +518,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        multiInputContainer.addEventListener('click', (e) => {
+        multiInputContainer.addEventListener('click', (e) => { // Bug fix was here
             if (e.target.matches('.pronounce-input-button')) {
                 const inputField = e.target.previousElementSibling;
                 if (inputField && inputField.matches('.vocabulary-input')) {
                     const text = inputField.value.trim();
                     if (text) {
                         speakText(text, null);
+                    }
+                }
+            } else if (e.target.matches('.search-button')) {
+                // Find the textarea associated with the clicked button
+                const inputField = e.target.previousElementSibling.previousElementSibling;
+                if (inputField && inputField.matches('.vocabulary-input')) {
+                    const text = inputField.value.trim();
+                    if (text) {
+                        showMeaning(text);
                     }
                 }
             }

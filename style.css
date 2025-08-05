@@ -258,7 +258,7 @@ button:disabled {
 
 .button-secondary:hover:not(:disabled) {
 
-    background-color: var(--button-secondary-hover-bg);
+    background-color: rgba(var(--button-secondary-hover-bg-rgb), 0.5); /* 50% transparent overlay */
     box-shadow: 0 6px 20px var(--button-secondary-hover-shadow);
 }
 
@@ -268,7 +268,7 @@ button:disabled {
 }
 
 .button-tertiary:hover:not(:disabled) {
-    background-color: var(--button-tertiary-hover-bg);
+    background-color: rgba(var(--button-tertiary-hover-bg-rgb), 0.5); /* 50% transparent overlay */
     box-shadow: 0 6px 20px var(--button-tertiary-hover-shadow);
 }
 
@@ -279,6 +279,15 @@ button:disabled {
     align-items: center; /* Align items vertically */
 }
 
+.input-with-button .search-button {
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    font-size: 16px;
+    border-radius: 50%;
+    line-height: 1;
+    align-items: center;
+}
 
 .input-with-button textarea {
     flex-grow: 1; /* Allows the textarea to take up the available space */
@@ -447,21 +456,6 @@ button:disabled {
 
 /* --- THEME DEFINITIONS --- */
 
-body[data-theme="academic"] {
-    --bg-gradient: linear-gradient(135deg, #e0c9a6 0%, #a98e71 100%);
-    --container-bg: rgba(245, 245, 220, 0.3); /* beige */
-    --container-border: rgba(245, 245, 220, 0.2);
-    --text-primary: #4a3f35; /* dark brown */
-    --text-secondary: #6b5b4b;
-    --input-bg: rgba(245, 245, 220, 0.4);
-    --input-border: rgba(74, 63, 53, 0.4);
-    --input-focus-border: #8B4513;
-    --button-primary-bg: #8B4513; /* saddle brown */
-    --button-primary-hover-bg: #6e3710;
-    --button-primary-shadow: rgba(139, 69, 19, 0.3);
-    --button-primary-hover-shadow: rgba(139, 69, 19, 0.4);
-}
-
 body[data-theme="forest"] {
     --bg-gradient: linear-gradient(135deg, #618866 0%, #2f4f4f 100%);
     --container-bg: rgba(255, 255, 255, 0.15);
@@ -478,43 +472,6 @@ body[data-theme="forest"] {
     --button-primary-shadow: rgba(85, 107, 47, 0.15);
     --button-primary-hover-shadow: rgba(85, 107, 47, 0.4);
 }
-/*background: var(--bg-gradient);*/
-body[data-theme="modern"] {
-    --bg-gradient: linear-gradient(135deg, #e9e9e9 0%, #d4d4d4 100%);
-    --container-bg: rgba(255, 255, 255, 0.4);
-    --container-border: rgba(255, 255, 255, 0.2);
-    --text-primary: #333333;
-    --text-secondary: #555555;
-    --input-bg: rgba(255, 255, 255, 0.6);
-    --text-on-primary-btn: #fff;
-    --input-border: rgba(51, 51, 51, 0.3);
-    --input-focus-border: #007aff;
-    --button-primary-bg: #007aff; /* Apple blue */
-    --button-primary-hover-bg: #005bb5;
-    --button-primary-shadow: rgba(0, 122, 255, 0.3);
-    --list-item-border: rgba(44, 62, 80, 0.1);
-
-    --button-primary-hover-shadow: rgba(0, 122, 255, 0.4);
-}
-
-body[data-theme="minimalist"] {
-    --bg-gradient: linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%);
-    --container-bg: rgba(255, 255, 255, 0.5);
-    --container-border: rgba(0, 0, 0, 0.1);
-    --text-primary: #000000;
-    --text-secondary: #444444;
-    --text-on-primary-btn: white;
-    --input-bg: rgba(255, 255, 255, 0.7);
-        --list-item-border: rgba(44, 62, 80, 0.1);
-
-
-    --input-border: rgba(0, 0, 0, 0.2);
-    --input-focus-border: #000000;
-    --button-primary-bg: #000000;
-    --button-primary-hover-bg: #333333;
-    --button-primary-shadow: rgba(0, 0, 0, 0.2);
-    --button-primary-hover-shadow: rgba(0, 0, 0, 0.3);
-}
 
 body[data-theme="creative"] {
     --bg-gradient: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
@@ -530,21 +487,6 @@ body[data-theme="creative"] {
     --button-primary-hover-bg: #f78ca0;
     --button-primary-shadow: rgba(250, 112, 154, 0.3);
     --button-primary-hover-shadow: rgba(250, 112, 154, 0.4);
-}
-
-body[data-theme="vintage"] {
-    --bg-gradient: linear-gradient(135deg, #d7d2cc 0%, #b0a89f 100%);
-    --container-bg: rgba(245, 241, 237, 0.5); /* off-white */
-    --container-border: rgba(245, 241, 237, 0.3);
-    --text-primary: #5a524c;
-    --text-secondary: #7e756f;
-    --input-bg: rgba(245, 241, 237, 0.6);
-    --input-border: rgba(90, 82, 76, 0.4);
-    --input-focus-border: #7d6b5a;
-    --button-primary-bg: #7d6b5a; /* muted brown */
-    --button-primary-hover-bg: #6c5b4a;
-    --button-primary-shadow: rgba(125, 107, 90, 0.3);
-    --button-primary-hover-shadow: rgba(125, 107, 90, 0.4);
 }
 
 body[data-theme="dark-mode"] {
@@ -600,4 +542,34 @@ body[data-theme="marine"] {
 #vocabulary-input {
     width: 100%;
 
+}
+
+/* --- Responsive Design for Mobile Devices --- */
+@media (max-width: 768px) {
+    .container {
+        padding: 25px 20px; /* Adjust padding for smaller screens */
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    .list-actions {
+        flex-wrap: wrap; /* This is the key: allows buttons to wrap to the next line */
+        justify-content: center; /* Center the buttons in the available space */
+        gap: 12px; /* Slightly reduce the gap on mobile */
+    }
+
+    .list-actions button {
+        width: 90px; /* Make buttons slightly smaller to fit 3 in a row */
+        height: 90px;
+        font-size: 12px; /* Adjust font size to prevent overflow */
+    }
+
+    .feedback-link-container, .version-info-container {
+        position: static; /* Let them flow in the document instead of being fixed to the corners */
+        text-align: center;
+        margin-top: 25px;
+    }
+}
 }

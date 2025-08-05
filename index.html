@@ -13,12 +13,8 @@
                 <label for="theme-select">Theme Selection:</label>
                 <select id="theme-select" title="Choose a theme">
                     <option value="default">Default</option>
-                    <option value="academic">Academic</option>
-                    <option value="modern">Modern</option>
-                    <option value="minimalist">Minimalist</option>
                     <option value="forest">Forest</option>
                     <option value="creative">Creative</option>
-                    <option value="vintage">Vintage</option>
                     <option value="dark-mode">Dark Mode</option>
                     <option value="cartoon">Cartoon</option>
                     <option value="marine">Marine</option>
@@ -50,29 +46,35 @@
                     <div class="input-with-button">
                         <textarea class="vocabulary-input" rows="1" placeholder="Enter item 1..."></textarea>
                         <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                        <button class="search-button" type="button" title="Search meaning">🔍</button>
                     </div>
                     <div class="input-with-button">
                         <textarea class="vocabulary-input" rows="1" placeholder="Enter item 2..."></textarea>
                         <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                        <button class="search-button" type="button" title="Search meaning">🔍</button>
                     </div>
                     <div class="input-with-button">
                         <textarea class="vocabulary-input" rows="1" placeholder="Enter item 3..."></textarea>
                         <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                        <button class="search-button" type="button" title="Search meaning">🔍</button>
                     </div>
                     <div class="input-with-button">
                         <textarea class="vocabulary-input" rows="1" placeholder="Enter item 4..."></textarea>
                         <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                       <button class="search-button" type="button" title="Search meaning">🔍</button>
                     </div>
                     <div class="input-with-button">
                         <textarea class="vocabulary-input" rows="1" placeholder="Enter item 5..."></textarea>
                         <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                        <button class="search-button" type="button" title="Search meaning">🔍</button>
                     </div>
                     <div class="input-with-button">
                         <textarea class="vocabulary-input" rows="1" placeholder="Enter item 6..."></textarea>
                         <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
+                        <button class="search-button" type="button" title="Search meaning">🔍</button>
                     </div>
                 </div>
-
+        
                 <div class="add-button-container">
                     <button id="add-button" type="button" title="Add all non-empty items to lists">+</button>
                 </div>
@@ -91,9 +93,9 @@
                 <a href="#" id="feedback-link">Make it better!</a>
             </div>
 
-            <!-- To update version, run `git rev-parse --short HEAD` in your terminal and paste the result -->
+            <!-- Version Information -->
             <div class="version-info-container">
-                Copyright &copy; TLWC | Version: cda6bc0
+                Copyright &copy; TLWC | Version: 250805a
             </div>
         </div>
     </main>
@@ -105,6 +107,14 @@
             <p>Help us improve! What do you like, or what could be better?</p>
             <textarea id="feedback-textarea" placeholder="Your thoughts..." rows="5"></textarea>
             <button id="send-feedback-btn">Send</button>
+        </div>
+    </div>
+
+    <div id="meaning-modal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close-btn" title="Close">&times;</span>
+            <h2>Meaning</h2>
+            <div id="meaning-text"></div>
         </div>
     </div>
 
