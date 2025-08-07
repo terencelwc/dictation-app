@@ -1,0 +1,574 @@
+:root {
+    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --container-bg: rgba(255, 255, 255, 0.3);
+    --container-border: rgba(255, 255, 255, 0.18);
+    --text-primary: #2c3e50;
+    --text-secondary: #34495e;
+    --text-placeholder: #7f8c8d;
+    --text-on-primary-btn: white;
+    --status-color: #c0392b;
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --input-focus-bg: rgba(255, 255, 255, 0.8);
+    --input-border: rgba(44, 62, 80, 0.3);
+    --input-focus-border: #3498db;
+    --list-bg: rgba(255, 255, 255, 0.2);
+    --list-border: rgba(255, 255, 255, 0.1);
+    --list-item-border: rgba(44, 62, 80, 0.1);
+    --button-primary-bg: #3498db;
+    --button-primary-hover-bg: #2980b9;
+    --button-primary-shadow: rgba(52, 152, 219, 0.3);
+    --button-primary-hover-shadow: rgba(41, 128, 185, 0.4);
+    --button-secondary-bg: #e74c3c;
+    --button-secondary-hover-bg: #c0392b;
+    --button-secondary-shadow: rgba(231, 76, 60, 0.3);
+    --button-secondary-hover-shadow: rgba(192, 57, 43, 0.4);
+    --button-tertiary-bg: #2ecc71;
+    --button-tertiary-hover-bg: #27ae60;
+    --button-tertiary-shadow: rgba(46, 204, 113, 0.3);
+    --button-tertiary-hover-shadow: rgba(39, 174, 96, 0.4);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    /* A gradient background makes the glass effect visible and appealing */
+    background: var(--bg-gradient);
+    background-attachment: fixed; /* Ensures the gradient stays in place on scroll */
+    color: var(--text-secondary);
+    margin: 0;
+    transition: background 0.5s ease;
+}
+
+
+.theme-switcher {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-secondary);
+}
+
+.main-content {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px; /* Increased padding for better spacing */
+    box-sizing: border-box;
+}
+
+.container {
+    /* --- Glassmorphism Effect --- */
+    background: var(--container-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--container-border);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+
+    padding: 40px 50px;
+    border-radius: 16px; /* More rounded corners */
+    width: 100%;
+    max-width: 720px; /* Wider for more space */
+    text-align: center;
+    position: relative; /* For positioning the theme switcher */
+}
+
+h1 {
+    color: var(--text-primary);
+    margin-bottom: 15px;
+    font-size: 2.5rem; /* Larger heading */
+}
+
+p {
+    color: var(--text-secondary); /* Darker text for better contrast */
+    margin-bottom: 35px;
+    font-size: 1.1rem; /* Slightly larger for readability */
+    line-height: 1.6;
+}
+
+.status-message {
+    color: var(--status-color); /* Slightly darker red for better contrast */
+    margin-bottom: 20px;
+    font-weight: bold;
+    min-height: 1.2em;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block; /* Default display for labels */
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Specific flex layout for the rate slider's label to align text and value */
+label[for$="-slider"] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.slider-value-display {
+    font-weight: 400;
+    font-size: 0.9em;
+    background-color: var(--list-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+}
+
+textarea,
+select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--input-border);
+    font-size: 16px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.3s, background-color 0.3s;
+    background-color: var(--input-bg); /* Semi-transparent inputs */
+    color: var(--text-primary);
+}
+
+.theme-switcher select {
+    padding: 5px 8px;
+    border-radius: 6px;
+    width: auto;
+    font-size: 14px;
+}
+
+textarea::placeholder {
+    color: var(--text-placeholder);
+}
+
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--input-focus-border);
+    background-color: var(--input-focus-bg);
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* --- Custom Slider Styles --- */
+input[type="range"] {
+    -webkit-appearance: none; /* Hides the slider so custom styles can be applied */
+    appearance: none;
+    width: 100%; /* Full-width */
+    height: 8px; /* Specified height */
+    background: var(--input-bg); /* Track background */
+    outline: none; /* Remove outline */
+    border-radius: 4px;
+    border: 1px solid var(--input-border);
+    transition: opacity .2s;
+    cursor: pointer;
+}
+
+/* --- Slider Thumb (the draggable circle) --- */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--button-primary-bg);
+    border-radius: 50%;
+    border: 2px solid var(--container-bg);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+    margin-top: -7px; /* Vertically center the thumb on the track */
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--button-primary-bg);
+    border-radius: 50%;
+    border: 2px solid var(--container-bg);
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s;
+}
+
+input[type="range"]:hover::-webkit-slider-thumb, input[type="range"]:hover::-moz-range-thumb {
+    background: var(--button-primary-hover-bg);
+}
+
+button {
+    background-color: var(--button-primary-bg);
+    color: var(--text-on-primary-btn);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+    width: 100%;
+    box-shadow: 0 4px 15px var(--button-primary-shadow); /* Add a subtle shadow to the button */
+}
+
+
+button:hover:not(:disabled) {
+    background-color: var(--button-primary-hover-bg);
+    box-shadow: 0 6px 20px var(--button-primary-hover-shadow);
+    transform: translateY(-2px); /* Add a slight lift on hover */
+}
+
+button:active:not(:disabled) {
+    transform: translateY(0) scale(0.98); /* Combine transforms for a press effect */
+    box-shadow: 0 2px 10px rgba(41, 128, 185, 0.3);
+}
+
+button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.list-actions button {
+    /* Make buttons circular and try to fit text */
+
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.5); /* Increased transparency */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Adjusted shadow */
+    line-height: 1.4;
+    text-align: center;
+    word-break: break-word; /* Helps with longer text */
+    color: var(--text-primary); /* Use theme's primary text color for contrast */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for readability */
+}
+
+.button-secondary {
+    background-color: var(--button-secondary-bg);
+    box-shadow: 0 4px 15px var(--button-secondary-shadow);
+}
+
+.button-secondary:hover:not(:disabled) {
+
+    background-color: rgba(var(--button-secondary-hover-bg-rgb), 0.5); /* 50% transparent overlay */
+    box-shadow: 0 6px 20px var(--button-secondary-hover-shadow);
+}
+
+.button-tertiary {
+    background-color: var(--button-tertiary-bg); /* A green color for a positive action */
+    box-shadow: 0 4px 15px var(--button-tertiary-shadow);
+}
+
+.button-tertiary:hover:not(:disabled) {
+    background-color: rgba(var(--button-tertiary-hover-bg-rgb), 0.5); /* 50% transparent overlay */
+    box-shadow: 0 6px 20px var(--button-tertiary-hover-shadow);
+}
+
+/* Styles for the vocabulary input area */
+.input-with-button {
+    display: flex;
+    gap: 10px;
+    align-items: center; /* Align items vertically */
+}
+
+.input-with-button .search-button {
+    width: 30px;
+    height: 30px;    
+    padding: 0;
+    font-size: 16px;
+    border-radius: 50%;
+    line-height: 1;    
+}
+
+.input-with-button textarea {
+    flex-grow: 1; /* Allows the textarea to take up the available space */
+    /* The rows="1" in HTML will make it thin, but let's ensure it behaves well */
+    padding-top: 14px;
+    padding-bottom: 14px;
+    line-height: 1.5; /* Better for single-line textareas */
+}
+
+.input-with-button textarea.masked {
+    color: transparent;
+    text-shadow: 0 0 8px var(--text-placeholder); /* Creates a nice masking effect */
+}
+
+/* Override general button styles for the round '+' add button */
+#add-button {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0; /* Prevent the button from shrinking */
+    padding: 0;
+    font-size: 30px; /* Make the '+' symbol larger */
+    font-weight: 300; /* A thinner plus sign can look more modern */
+    border-radius: 50%; /* Make it a circle */
+    line-height: 1; /* Helps with vertical alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* New styles for the pronounce button */
+.pronounce-input-button {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    padding: 0;
+    font-size: 16px;
+    border-radius: 50%;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--button-tertiary-bg);
+    box-shadow: 0 4px 15px var(--button-tertiary-shadow);
+}
+
+.pronounce-input-button:hover:not(:disabled) {
+    background-color: var(--button-tertiary-hover-bg);
+    box-shadow: 0 6px 20px var(--button-tertiary-hover-shadow);
+}
+
+/* Container for the multiple input rows */
+#multi-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* A little space between input rows */
+}
+
+.add-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.list-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+
+    width: 100%;
+    justify-content: space-around;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.input-with-button.hidden {
+    display: none;
+}
+
+.feedback-link-container {
+    position: absolute;
+    bottom: 15px;
+    left: 25px;
+    font-size: 0.9rem;
+}
+
+.feedback-link-container a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--text-secondary);
+    transition: color 0.3s;
+}
+
+.feedback-link-container a:hover {
+    color: var(--text-primary);
+}
+
+.version-info-container {
+    position: absolute;
+    bottom: 15px;
+    right: 25px;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    opacity: 0.7; /* Make it a bit more subtle */
+}
+
+/* --- Modal Styles --- */
+.modal-overlay {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s;
+}
+
+.modal-content {
+    background-color: var(--container-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--container-border);
+    margin: auto;
+    padding: 30px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    text-align: center;
+    animation: slideIn 0.4s;
+}
+
+.modal-close-btn {
+    color: var(--text-secondary);
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.modal-close-btn:hover {
+    color: var(--text-primary);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; }
+}
+
+.dictation-controls {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+/* --- THEME DEFINITIONS --- */
+
+body[data-theme="forest"] {
+    --bg-gradient: linear-gradient(135deg, #618866 0%, #2f4f4f 100%);
+    --container-bg: rgba(255, 255, 255, 0.15);
+    --container-border: rgba(255, 255, 255, 0.15);
+    --text-primary: #f0fff0; /* honeydew */
+    --text-secondary: #d3e0d3;
+    --text-on-primary-btn: #f0fff0;
+    --input-bg: rgba(255, 255, 255, 0.1);
+    --input-border: rgba(240, 255, 240, 0.1);
+    --input-focus-border: #8fbc8f;
+    --list-bg: rgba(0, 0, 0, 0.1);
+    --button-primary-bg: #556b2f; /* dark olive green */
+    --button-primary-hover-bg: #455726;
+    --button-primary-shadow: rgba(85, 107, 47, 0.15);
+    --button-primary-hover-shadow: rgba(85, 107, 47, 0.4);
+}
+
+body[data-theme="creative"] {
+    --bg-gradient: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+    --container-bg: rgba(255, 255, 255, 0.4);
+    --container-border: rgba(255, 255, 255, 0.3);
+    --text-primary: #6a11cb; /* purple */
+    --text-secondary: #2575fc; /* blue */
+    --text-on-primary-btn: white;
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --input-border: rgba(106, 17, 203, 0.3);
+    --input-focus-border: #2575fc;
+    --button-primary-bg: #fa709a; /* pink */
+    --button-primary-hover-bg: #f78ca0;
+    --button-primary-shadow: rgba(250, 112, 154, 0.3);
+    --button-primary-hover-shadow: rgba(250, 112, 154, 0.4);
+}
+
+body[data-theme="dark-mode"] {
+    --bg-gradient: linear-gradient(135deg, #232526 0%, #414345 100%);
+    --container-bg: rgba(30, 30, 30, 0.3);
+    --container-border: rgba(255, 255, 255, 0.1);
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --text-on-primary-btn: #ffffff;
+    --input-bg: rgba(0, 0, 0, 0.2);
+    --input-border: rgba(224, 224, 224, 0.2);
+    --input-focus-border: #4dabf7; /* light blue */
+    --list-bg: rgba(0, 0, 0, 0.2);
+    --button-primary-bg: #364f6b;
+    --button-primary-hover-bg: #2b3f56;
+    --button-primary-shadow: rgba(54, 79, 107, 0.3);
+    --button-primary-hover-shadow: rgba(54, 79, 107, 0.4);
+}
+
+body[data-theme="cartoon"] {
+    --bg-gradient: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+    --container-bg: rgba(255, 255, 255, 0.6);
+    --container-border: rgba(255, 255, 255, 0.4);
+    --text-primary: #d63384; /* pink */
+    --text-secondary: #e85a9b;
+    --text-on-primary-btn: #495057;
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --input-border: rgba(214, 51, 132, 0.3);
+    --input-focus-border: #ffc107;
+    --button-primary-bg: #ffc107; /* yellow */
+    --button-primary-hover-bg: #ffb300;
+    --button-primary-shadow: rgba(255, 193, 7, 0.3);
+    --button-primary-hover-shadow: rgba(255, 193, 7, 0.4);
+}
+
+body[data-theme="marine"] {
+    --bg-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+
+    --container-bg: rgba(255, 255, 255, 0.25);
+    --container-border: rgba(255, 255, 255, 0.2);
+    --text-primary: #00394d; /* dark teal */
+    --text-secondary: #005f7a;
+    --text-on-primary-btn: white;
+    --input-bg: rgba(255, 255, 255, 0.2);
+    --input-border: rgba(0, 57, 77, 0.3);
+    --input-focus-border: #ff8c00;
+    --button-primary-bg: #ff8c00; /* dark orange */
+    --button-primary-hover-bg: #e67e00;
+    --button-primary-shadow: rgba(255, 140, 0, 0.3);
+    --button-primary-hover-shadow: rgba(255, 140, 0, 0.4);
+}
+
+#vocabulary-input {
+    width: 100%;
+
+}
+
+/* --- Responsive Design for Mobile Devices --- */
+@media (max-width: 768px) {
+    .container {
+        padding: 25px 20px; /* Adjust padding for smaller screens */
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    .list-actions {
+        flex-wrap: wrap; /* This is the key: allows buttons to wrap to the next line */
+        justify-content: center; /* Center the buttons in the available space */
+        gap: 12px; /* Slightly reduce the gap on mobile */
+    }
+
+    .list-actions button {
+        width: 90px; /* Make buttons slightly smaller to fit 3 in a row */
+        height: 90px;
+        font-size: 12px; /* Adjust font size to prevent overflow */
+    }
+
+    .feedback-link-container, .version-info-container {
+        position: static; /* Let them flow in the document instead of being fixed to the corners */
+        text-align: center;
+        margin-top: 25px;
+    }
+}
+}
