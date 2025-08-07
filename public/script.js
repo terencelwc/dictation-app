@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function showMeaning(text) {
-        meaningText.innerHTML = `Searching for: <strong>${text}</strong>...`;
+        meaningText.innerHTML = '<div class="loader"></div>';
         meaningModal.style.display = 'flex';
 
         try {
