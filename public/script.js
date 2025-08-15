@@ -42,7 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
         voices = synth.getVoices();
         voiceSelect.innerHTML = '';
 
-        const supportedVoices = voices.filter(voice => voice.lang.startsWith('en-') || voice.lang.startsWith('zh-HK'));
+        // Make the filter more robust for different platforms (like Android)
+        // by checking for 'en' as well as 'en-*' and using a case-insensitive match.
+        const supportedVoices = voices.filter(voice => {
+            const lang = voice.lang.toLowerCase();
+            return lang.startsWith('en') || lang.startsWith('zh-hk');
+        });
 
         if (supportedVoices.length === 0) {
             status.textContent = "No English or Cantonese voices found in your browser.";
@@ -57,7 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             option.setAttribute('data-lang', voice.lang);
             option.setAttribute('data-name', voice.name);
 
-            if (!cantoneseVoiceFound && voice.lang.startsWith('zh-HK')) {
+            // Use case-insensitive check to match the filter logic
+            if (!cantoneseVoiceFound && voice.lang.toLowerCase().startsWith('zh-hk')) {
                 option.selected = true;
                 cantoneseVoiceFound = true;
             }
@@ -529,13 +535,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-       // Load voices and populate the list
-        function loadVoices() {
+        // Load voices. This is asynchronous on some browsers.
+        if (speechSynthesis.getVoices().length > 0) {
             populateVoiceList();
-        }
-        
-        if (synth.onvoiceschanged !== undefined) {
-            synth.onvoiceschanged = loadVoices;
+        } else if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
         }
 
         loadListFromStorage();
@@ -661,5 +665,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     init();
-    populateVoiceList();
 });
