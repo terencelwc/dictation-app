@@ -572,30 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(savedTheme);
     }
 
-    // --- Initialization and Event Listeners ---
-    function init() {
-        // Check for browser support
-        if (!('speechSynthesis' in window)) {
-            status.textContent = "Sorry, your browser doesn't support text-to-speech.";
-            [speakButton, voiceSelect, addButton].forEach(el => el.disabled = true);
-            return;
-        }
-
-        // The onvoiceschanged event is the most reliable way to get voices.
-        // We also call populateVoiceList() once here in case the event has already fired
-        // or for browsers that don't fire it consistently.
-        populateVoiceList();
-        if (synth.onvoiceschanged !== undefined) {
-            synth.onvoiceschanged = populateVoiceList;
-        }
-
-        loadListFromStorage();
-        loadTheme();
-        loadRateFromStorage();
-        loadPitchFromStorage();
-        setInitialUIState();
-
-        // Attach event listeners
+    function attachEventListeners() {
         addButton.addEventListener('click', addNewInputLine);
         speakButton.addEventListener('click', startDictation);
         shuffleButton.addEventListener('click', shuffleLines);
@@ -634,11 +611,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const body = feedbackText;
             const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-            // This will open the user's default email client.
-            // It does not send the email automatically from the browser.
             window.location.href = mailtoLink;
 
-            // Show thank you message and close modal
             status.textContent = "Thank you! Your email app has been opened.";
             setTimeout(() => {
                 status.textContent = '';
@@ -652,7 +626,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 saveListToStorage();
             }
         });
-
 
         multiInputContainer.addEventListener('keydown', (e) => {
             if (!e.target.matches('.vocabulary-input')) return;
@@ -671,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        multiInputContainer.addEventListener('click', (e) => { // Bug fix was here
+        multiInputContainer.addEventListener('click', (e) => {
             const inputField = e.target.closest('.input-with-button')?.querySelector('.vocabulary-input');
             if (!inputField) return;
 
@@ -702,6 +675,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         themeSelect.addEventListener('change', (e) => applyTheme(e.target.value));
+    }
+
+    // --- Initialization and Event Listeners ---
+    function init() {
+        // Check for browser support
+        if (!('speechSynthesis' in window)) {
+            status.textContent = "Sorry, your browser doesn't support text-to-speech.";
+            [speakButton, voiceSelect, addButton].forEach(el => el.disabled = true);
+            return;
+        }
+
+        // The onvoiceschanged event is the most reliable way to get voices.
+        // We also call populateVoiceList() once here in case the event has already fired
+        // or for browsers that don't fire it consistently.
+        populateVoiceList();
+        if (synth.onvoiceschanged !== undefined) {
+            synth.onvoiceschanged = populateVoiceList;
+        }
+
+        loadListFromStorage();
+        loadTheme();
+        loadRateFromStorage();
+        loadPitchFromStorage();
+        setInitialUIState();
+
+        attachEventListeners();
     }
 
     init();

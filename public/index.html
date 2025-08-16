@@ -3,76 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dictation Practice (Chinese & English)</title>
+    <meta name="description" content="A web application for dictation practice and vocabulary building with text-to-speech.">
+    <title>Dictation Practice App</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/pinyin/dist/pinyin.js"></script>
 </head>
-<body data-theme="default">
+<body>
+    <div class="theme-switcher">
+        <label for="theme-select">Theme:</label>
+        <select id="theme-select">
+            <option value="default">Default</option>
+            <option value="dark-mode">Dark Mode</option>
+            <option value="forest">Forest</option>
+            <option value="marine">Marine</option>
+            <option value="creative">Creative</option>
+            <option value="cartoon">Cartoon</option>
+        </select>
+    </div>
+
     <main class="main-content">
         <div class="container">
-            <div class="theme-switcher">
-                <label for="theme-select">Theme Selection:</label>
-                <select id="theme-select" title="Choose a theme">
-                    <option value="default">Default</option>
-                    <option value="forest">Forest</option>
-                    <option value="creative">Creative</option>
-                    <option value="dark-mode">Dark Mode</option>
-                    <option value="cartoon">Cartoon</option>
-                    <option value="marine">Marine</option>
-                </select>
-            </div>
             <h1>Dictation Practice</h1>
-            <p>Add items to the list, select a voice, and click "Start Dictation" to begin.</p>
-            
-            <div id="status" class="status-message"></div>
+            <p>Enter your vocabulary below, then use the controls to start your practice session.</p>
+            <p id="status" class="status-message"></p>
 
-            <div class="form-group">
-                <label for="voice-select">Choose a Voice:</label>
-                <select id="voice-select"></select>
+            <div class="settings-grid">
+                <div class="form-group">
+                    <label for="voice-select">Voice</label>
+                    <select id="voice-select"></select>
+                </div>
+                <div class="form-group">
+                    <label for="rate-slider">
+                        <span>Rate</span>
+                        <span id="rate-value-display" class="slider-value-display">1.0x</span>
+                    </label>
+                    <input type="range" id="rate-slider" min="0.5" max="2" step="0.1" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="pitch-slider">
+                        <span>Pitch</span>
+                        <span id="pitch-value-display" class="slider-value-display">1.0</span>
+                    </label>
+                    <input type="range" id="pitch-slider" min="0" max="2" step="0.1" value="1">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="rate-slider">Speech Rate: <span id="rate-value-display" class="slider-value-display">1.0x</span></label>
-                <input type="range" id="rate-slider" min="0.1" max="2" step="0.1" value="1" title="Adjust speech rate">
-            </div>
-
-            <div class="form-group">
-                <label for="pitch-slider">Speech Pitch: <span id="pitch-value-display" class="slider-value-display">1.0</span></label>
-                <input type="range" id="pitch-slider" min="0" max="2" step="0.1" value="1" title="Adjust speech pitch">
-            </div>
-
-            <div id="vocabulary-input-area" class="form-group">
-                <label>Enter Vocabulary/Sentences:</label>
+            <div class="input-section">
                 <div id="multi-input-container">
-                    <div class="input-with-button">
-                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 1..."></textarea>
-                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
-                        <button class="search-button" type="button" title="Search meaning">🔍</button>
-                    </div>
-                    <div class="input-with-button">
-                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 2..."></textarea>
-                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
-                        <button class="search-button" type="button" title="Search meaning">🔍</button>
-                    </div>
-                    <div class="input-with-button">
-                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 3..."></textarea>
-                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
-                        <button class="search-button" type="button" title="Search meaning">🔍</button>
-                    </div>
-                    <div class="input-with-button">
-                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 4..."></textarea>
-                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
-                       <button class="search-button" type="button" title="Search meaning">🔍</button>
-                    </div>
-                    <div class="input-with-button">
-                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 5..."></textarea>
-                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
-                        <button class="search-button" type="button" title="Search meaning">🔍</button>
-                    </div>
-                    <div class="input-with-button">
-                        <textarea class="vocabulary-input" rows="1" placeholder="Enter item 6..."></textarea>
-                        <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
-                        <button class="search-button" type="button" title="Search meaning">🔍</button>
-                    </div>
+                    <!-- JS will populate this -->
                 </div>
         
                 <div class="add-button-container">
@@ -80,7 +58,7 @@
                 </div>
             </div>
 
-  <div class="list-actions">
+            <div class="list-actions">
                 <button id="speak-button">Start Dictation</button>
                 <button id="shuffle-button">Shuffle</button>
                 <button id="read-all-button">Read All</button>
@@ -90,7 +68,7 @@
             </div>
 
             <div class="feedback-link-container">
-                <a href="#" id="feedback-link">Make it better!</a>
+                <a href="#" id="feedback-link">Send Feedback</a>
             </div>
 
             <!-- Version Information -->
@@ -100,24 +78,25 @@
         </div>
     </main>
 
+    <!-- Feedback Modal -->
     <div id="feedback-modal" class="modal-overlay">
         <div class="modal-content">
-            <span class="modal-close-btn" title="Close">&times;</span>
-            <h2>Share Your Feedback</h2>
-            <p>Help us improve! What do you like, or what could be better?</p>
-            <textarea id="feedback-textarea" placeholder="Your thoughts..." rows="5"></textarea>
-            <button id="send-feedback-btn">Send</button>
+            <span class="modal-close-btn">&times;</span>
+            <h2>Send Feedback</h2>
+            <p>Have a suggestion or found a bug? Let me know!</p>
+            <textarea id="feedback-textarea" rows="5" placeholder="Your feedback..."></textarea>
+            <button id="send-feedback-btn">Send via Email</button>
         </div>
     </div>
 
+    <!-- Meaning Modal -->
     <div id="meaning-modal" class="modal-overlay">
         <div class="modal-content">
-            <span class="modal-close-btn" title="Close">&times;</span>
-            <h2>Meaning</h2>
+            <span class="modal-close-btn">&times;</span>
             <div id="meaning-text"></div>
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
