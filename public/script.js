@@ -48,14 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const curatedVoices = [];
         const seenNames = new Set();
-        const voiceLimit = 10;
+        const voiceLimit = 10; // A more focused list of 10 voices is often better for UX.
+        const blacklistedNames = new Set([
+            // A more comprehensive list of iOS novelty voices to exclude.
+            'Albert', 'Bahh', 'Bells', 'Boing', 'Bubbles', 'Cellos', 'Deranged',
+            'Eddy', 'Flo', 'Good News', 'Hysterical', 'Jester', 'Organ', 'Pipe Organ',
+            'Rocko', 'Superstar', 'Trinoids', 'Whisper', 'Zarvox'
+        ]);
 
         // Helper to find and add a unique voice to the curated list
         const findAndAddVoice = (voiceCriteria) => {
             if (curatedVoices.length >= voiceLimit) return;
 
             const foundVoice = voices.find(v =>
-                !seenNames.has(v.name) &&
+                !seenNames.has(v.name) && !blacklistedNames.has(v.name) && // Check against the blacklist
                 (voiceCriteria.name ? v.name === voiceCriteria.name : true) &&
                 v.lang === voiceCriteria.lang
             );
@@ -69,10 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // 1. Prioritize the user-specified "must-have" voices.
         const requiredVoices = [
             { name: 'Sin-ji', lang: 'zh-HK' },
-            { name: 'Samantha', lang: 'en-US' },    // US English
-            { name: 'Daniel', lang: 'en-GB' },      // UK English
-            { name: 'Karen', lang: 'en-AU' },      // Australian English
-            { name: 'Ting-Ting', lang: 'zh-CN' },    // Mandarin
+            { name: 'Samantha', lang: 'en-US' },    // US English (High-quality on iOS/macOS)
+            { name: 'Daniel', lang: 'en-GB' },      // UK English (High-quality on iOS/macOS)
+            { name: 'Karen', lang: 'en-AU' },      // Australian English (High-quality on iOS/macOS)
+            { name: 'Ting-Ting', lang: 'zh-CN' },    // Mandarin (High-quality on iOS/macOS)
         ];
         requiredVoices.forEach(findAndAddVoice);
 
@@ -95,7 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let voicesToDisplay = curatedVoices;
         if (voicesToDisplay.length === 0) {
             voicesToDisplay = voices
-                .filter(v => v.lang.startsWith('en-') || v.lang.startsWith('zh-'))
+                .filter(v =>
+                    (v.lang.startsWith('en-') || v.lang.startsWith('zh-')) &&
+                    !blacklistedNames.has(v.name) // Exclude blacklisted voices from fallback
+                )
                 .slice(0, voiceLimit);
         }
 
@@ -204,17 +213,22 @@ document.addEventListener('DOMContentLoaded', () => {
         resetButton.disabled = false;      // Still useful
     }
 
-    // --- Vocabulary & List Management ---
-    function addNewInputLine() {
-        const newRow = document.createElement('div');
-        newRow.className = 'input-with-button';
-    
-        newRow.innerHTML = `
-            <textarea class="vocabulary-input" rows="1" placeholder="Enter another item..."></textarea>
+    // --- Helper function to create a new input row ---
+    function createInputRow(text = '', placeholder = 'Enter item...') {
+        const row = document.createElement('div');
+        row.className = 'input-with-button';
+        row.innerHTML = `
+            <textarea class="vocabulary-input" rows="1" placeholder="${placeholder}"></textarea>
             <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
             <button class="search-button" type="button" title="Search meaning">🔍</button>
         `;
-    
+        row.querySelector('textarea').value = text;
+        return row;
+    }
+
+    // --- Vocabulary & List Management ---
+    function addNewInputLine() {
+        const newRow = createInputRow('', 'Enter another item...');
         multiInputContainer.appendChild(newRow);
         // Focus the newly created textarea
         newRow.querySelector('.vocabulary-input').focus();
@@ -239,13 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Re-create 6 default lines
         for (let i = 1; i <= 6; i++) {
-            const newRow = document.createElement('div');
-            newRow.className = 'input-with-button';
-            newRow.innerHTML = `
-                <textarea class="vocabulary-input" rows="1" placeholder="Enter item ${i}..."></textarea>
-                <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
-                <button class="search-button" type="button" title="Search meaning">🔍</button>
-            `;
+            const newRow = createInputRow('', `Enter item ${i}...`);
             multiInputContainer.appendChild(newRow);
         }
         setInitialUIState();
@@ -261,7 +269,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadListFromStorage() {
         const savedListJSON = localStorage.getItem(VOCAB_LIST_STORAGE_KEY);
-        if (!savedListJSON) return;
+        if (!savedListJSON) {
+            // If no saved list, populate with default empty lines to fix empty initial state.
+            multiInputContainer.innerHTML = '';
+            for (let i = 1; i <= 6; i++) {
+                const newRow = createInputRow('', `Enter item ${i}...`);
+                multiInputContainer.appendChild(newRow);
+            }
+            return;
+        }
 
         const savedList = JSON.parse(savedListJSON);
         
@@ -273,14 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             for (let i = 0; i < numLines; i++) {
                 const itemText = savedList[i] || '';
-                const newRow = document.createElement('div');
-                newRow.className = 'input-with-button';
-                newRow.innerHTML = `
-                    <textarea class="vocabulary-input" rows="1" placeholder="Enter item ${i + 1}..."></textarea>
-                    <button class="pronounce-input-button" type="button" title="Pronounce entered text">▶</button>
-                    <button class="search-button" type="button" title="Search meaning">🔍</button>
-                `;
-                newRow.querySelector('textarea').value = itemText;
+                const placeholder = `Enter item ${i + 1}...`;
+                const newRow = createInputRow(itemText, placeholder);
                 multiInputContainer.appendChild(newRow);
             }
         }
