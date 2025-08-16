@@ -42,27 +42,83 @@ document.addEventListener('DOMContentLoaded', () => {
         voices = synth.getVoices();
         voiceSelect.innerHTML = '';
 
-        const supportedVoices = voices.filter(voice => voice.lang.startsWith('en-') || voice.lang.startsWith('zh-HK'));
-
-        if (supportedVoices.length === 0) {
-            status.textContent = "No English or Cantonese voices found in your browser.";
-            speakButton.disabled = true;
+        if (voices.length === 0) {
             return;
         }
 
-        let cantoneseVoiceFound = false;
-        supportedVoices.forEach(voice => {
+        const curatedVoices = [];
+        const seenNames = new Set();
+        const voiceLimit = 10;
+
+        // Helper to find and add a unique voice to the curated list
+        const findAndAddVoice = (voiceCriteria) => {
+            if (curatedVoices.length >= voiceLimit) return;
+
+            const foundVoice = voices.find(v =>
+                !seenNames.has(v.name) &&
+                (voiceCriteria.name ? v.name === voiceCriteria.name : true) &&
+                v.lang === voiceCriteria.lang
+            );
+
+            if (foundVoice) {
+                curatedVoices.push(foundVoice);
+                seenNames.add(foundVoice.name);
+            }
+        };
+
+        // 1. Prioritize the user-specified "must-have" voices.
+        const requiredVoices = [
+            { name: 'Sin-ji', lang: 'zh-HK' },
+            { name: 'Samantha', lang: 'en-US' },    // US English
+            { name: 'Daniel', lang: 'en-GB' },      // UK English
+            { name: 'Karen', lang: 'en-AU' },      // Australian English
+            { name: 'Ting-Ting', lang: 'zh-CN' },    // Mandarin
+        ];
+        requiredVoices.forEach(findAndAddVoice);
+
+        // 2. Add other optional, high-quality voices to fill the list up to the limit.
+        const optionalVoices = [
+            { name: 'Alex', lang: 'en-US' }, // Common on Apple
+            { name: 'Google US English', lang: 'en-US' }, // Common on Chrome/Android
+            { name: 'Google UK English Female', lang: 'en-GB' },
+            { name: 'Google 普通话（中国大陆）', lang: 'zh-CN' },
+            // Generic language fallbacks if named voices aren't found
+            { lang: 'zh-HK' },
+            { lang: 'zh-CN' },
+            { lang: 'en-US' },
+            { lang: 'en-GB' },
+            { lang: 'en-AU' },
+        ];
+        optionalVoices.forEach(findAndAddVoice);
+
+        // 3. If the curated list is still empty, fall back to a general filter.
+        let voicesToDisplay = curatedVoices;
+        if (voicesToDisplay.length === 0) {
+            voicesToDisplay = voices
+                .filter(v => v.lang.startsWith('en-') || v.lang.startsWith('zh-'))
+                .slice(0, voiceLimit);
+        }
+
+        // 4. Populate the dropdown with the final, curated list.
+        let preferredVoiceSelected = false;
+        voicesToDisplay.forEach(voice => {
             const option = document.createElement('option');
             option.textContent = `${voice.name} (${voice.lang})`;
             option.setAttribute('data-lang', voice.lang);
             option.setAttribute('data-name', voice.name);
-
-            if (!cantoneseVoiceFound && voice.lang.startsWith('zh-HK')) {
-                option.selected = true;
-                cantoneseVoiceFound = true;
-            }
             voiceSelect.appendChild(option);
+
+            // Automatically select the first Cantonese or US English voice as the default.
+            if (!preferredVoiceSelected && (voice.lang === 'zh-HK' || voice.lang === 'en-US')) {
+                option.selected = true;
+                preferredVoiceSelected = true;
+            }
         });
+
+        // Final fallback if no preferred voice was selected from the curated list.
+        if (!preferredVoiceSelected && voiceSelect.options.length > 0) {
+            voiceSelect.options[0].selected = true;
+        }
     }
 
     function speakText(text, onEndCallback) {
@@ -162,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
         multiInputContainer.appendChild(newRow);
         // Focus the newly created textarea
         newRow.querySelector('.vocabulary-input').focus();
-    saveListToStorage();
+        saveListToStorage();
     }
 
     function showAnswers() {
@@ -193,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
             multiInputContainer.appendChild(newRow);
         }
         setInitialUIState();
-        localStorage.removeItem(VOCAB_LIST_STORAGE_KEY);
+        saveListToStorage(); // Save the newly created empty list
     }
 
     // --- List Storage ---
@@ -294,10 +350,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function getEnglishDefinition(word) {
-        // This API works best for single words. If it's a sentence, it will likely fail.
-        if (word.includes(' ')) {
-            return '<p>Definitions are only available for single words.</p>';
-        }
         try {
             const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
             if (!response.ok || response.status === 404) {
@@ -621,23 +673,16 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         multiInputContainer.addEventListener('click', (e) => { // Bug fix was here
+            const inputField = e.target.closest('.input-with-button')?.querySelector('.vocabulary-input');
+            if (!inputField) return;
+
+            const text = inputField.value.trim();
+            if (!text) return;
+
             if (e.target.matches('.pronounce-input-button')) {
-                const inputField = e.target.previousElementSibling;
-                if (inputField && inputField.matches('.vocabulary-input')) {
-                    const text = inputField.value.trim();
-                    if (text) {
-                        speakText(text, null);
-                    }
-                }
+                speakText(text, null);
             } else if (e.target.matches('.search-button')) {
-                // Find the textarea associated with the clicked button
-                const inputField = e.target.previousElementSibling.previousElementSibling;
-                 if (inputField && inputField.matches('.vocabulary-input')) {
-                    const text = inputField.value.trim();
-                    if (text) {
-                        showMeaning(text);
-                    }
-                }
+                showMeaning(text);
             }
         });
 

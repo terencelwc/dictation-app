@@ -30,15 +30,12 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-
-    /* A gradient background makes the glass effect visible and appealing */
     background: var(--bg-gradient);
-    background-attachment: fixed; /* Ensures the gradient stays in place on scroll */
+    background-attachment: fixed;
     color: var(--text-secondary);
     margin: 0;
     transition: background 0.5s ease;
 }
-
 
 .theme-switcher {
     position: absolute;
@@ -55,41 +52,39 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 40px; /* Increased padding for better spacing */
+    padding: 40px;
     box-sizing: border-box;
 }
 
 .container {
-    /* --- Glassmorphism Effect --- */
     background: var(--container-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--container-border);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
-
     padding: 40px 50px;
-    border-radius: 16px; /* More rounded corners */
+    border-radius: 16px;
     width: 100%;
-    max-width: 720px; /* Wider for more space */
+    max-width: 720px;
     text-align: center;
-    position: relative; /* For positioning the theme switcher */
+    position: relative;
 }
 
 h1 {
     color: var(--text-primary);
     margin-bottom: 15px;
-    font-size: 2.5rem; /* Larger heading */
+    font-size: 2.5rem;
 }
 
 p {
-    color: var(--text-secondary); /* Darker text for better contrast */
+    color: var(--text-secondary);
     margin-bottom: 35px;
-    font-size: 1.1rem; /* Slightly larger for readability */
+    font-size: 1.1rem;
     line-height: 1.6;
 }
 
 .status-message {
-    color: var(--status-color); /* Slightly darker red for better contrast */
+    color: var(--status-color);
     margin-bottom: 20px;
     font-weight: bold;
     min-height: 1.2em;
@@ -101,13 +96,12 @@ p {
 }
 
 .form-group label {
-    display: block; /* Default display for labels */
+    display: block;
     margin-bottom: 8px;
     font-weight: 600;
     color: var(--text-primary);
 }
 
-/* Specific flex layout for the rate slider's label to align text and value */
 label[for$="-slider"] {
     display: flex;
     justify-content: space-between;
@@ -133,7 +127,7 @@ select {
     font-family: inherit;
     box-sizing: border-box;
     transition: border-color 0.3s, background-color 0.3s;
-    background-color: var(--input-bg); /* Semi-transparent inputs */
+    background-color: var(--input-bg);
     color: var(--text-primary);
 }
 
@@ -159,21 +153,19 @@ textarea {
     resize: vertical;
 }
 
-/* --- Custom Slider Styles --- */
 input[type="range"] {
-    -webkit-appearance: none; /* Hides the slider so custom styles can be applied */
+    -webkit-appearance: none;
     appearance: none;
-    width: 100%; /* Full-width */
-    height: 8px; /* Specified height */
-    background: var(--input-bg); /* Track background */
-    outline: none; /* Remove outline */
+    width: 100%;
+    height: 8px;
+    background: var(--input-bg);
+    outline: none;
     border-radius: 4px;
     border: 1px solid var(--input-border);
     transition: opacity .2s;
     cursor: pointer;
 }
 
-/* --- Slider Thumb (the draggable circle) --- */
 input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
@@ -184,7 +176,7 @@ input[type="range"]::-webkit-slider-thumb {
     border: 2px solid var(--container-bg);
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
     transition: background-color 0.3s;
-    margin-top: -7px; /* Vertically center the thumb on the track */
+    margin-top: -7px;
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -212,18 +204,17 @@ button {
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
     width: 100%;
-    box-shadow: 0 4px 15px var(--button-primary-shadow); /* Add a subtle shadow to the button */
+    box-shadow: 0 4px 15px var(--button-primary-shadow);
 }
-
 
 button:hover:not(:disabled) {
     background-color: var(--button-primary-hover-bg);
     box-shadow: 0 6px 20px var(--button-primary-hover-shadow);
-    transform: translateY(-2px); /* Add a slight lift on hover */
+    transform: translateY(-2px);
 }
 
 button:active:not(:disabled) {
-    transform: translateY(0) scale(0.98); /* Combine transforms for a press effect */
+    transform: translateY(0) scale(0.98);
     box-shadow: 0 2px 10px rgba(41, 128, 185, 0.3);
 }
 
@@ -234,89 +225,70 @@ button:disabled {
 }
 
 .list-actions button {
-    /* Make buttons circular and try to fit text */
-
     border-radius: 50%;
     width: 100px;
     height: 100px;
     padding: 8px;
     font-size: 13px;
     font-weight: 500;
-    background: rgba(255, 255, 255, 0.5); /* Increased transparency */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2); /* Adjusted shadow */
     line-height: 1.4;
     text-align: center;
-    word-break: break-word; /* Helps with longer text */
-    color: var(--text-primary); /* Use theme's primary text color for contrast */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for readability */
+    word-break: break-word;
+    color: var(--text-primary);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    /* Reverted to a uniform, semi-transparent background to match the glass theme */
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-.button-secondary {
-    background-color: var(--button-secondary-bg);
-    box-shadow: 0 4px 15px var(--button-secondary-shadow);
+/* This uniform hover effect will override other hover styles for these buttons */
+.list-actions button:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.75); /* Brighter on hover */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+    transform: translateY(-2px); /* Keep the lift effect */
 }
 
-.button-secondary:hover:not(:disabled) {
-
-    background-color: rgba(var(--button-secondary-hover-bg-rgb), 0.5); /* 50% transparent overlay */
-    box-shadow: 0 6px 20px var(--button-secondary-hover-shadow);
-}
-
-.button-tertiary {
-    background-color: var(--button-tertiary-bg); /* A green color for a positive action */
-    box-shadow: 0 4px 15px var(--button-tertiary-shadow);
-}
-
-.button-tertiary:hover:not(:disabled) {
-    background-color: rgba(var(--button-tertiary-hover-bg-rgb), 0.5); /* 50% transparent overlay */
-    box-shadow: 0 6px 20px var(--button-tertiary-hover-shadow);
-}
-
-/* Styles for the vocabulary input area */
 .input-with-button {
     display: flex;
     gap: 10px;
-    align-items: center; /* Align items vertically */
+    align-items: center;
 }
 
 .input-with-button .search-button {
-    width: 30px;
-    height: 30px;    
+    width: 40px;
+    height: 40px;
     padding: 0;
     font-size: 16px;
     border-radius: 50%;
-    line-height: 1;    
+    flex-shrink: 0;
 }
 
 .input-with-button textarea {
-    flex-grow: 1; /* Allows the textarea to take up the available space */
-    /* The rows="1" in HTML will make it thin, but let's ensure it behaves well */
+    flex-grow: 1;
     padding-top: 14px;
     padding-bottom: 14px;
-    line-height: 1.5; /* Better for single-line textareas */
+    line-height: 1.5;
 }
 
 .input-with-button textarea.masked {
     color: transparent;
-    text-shadow: 0 0 8px var(--text-placeholder); /* Creates a nice masking effect */
+    text-shadow: 0 0 8px var(--text-placeholder);
 }
 
-/* Override general button styles for the round '+' add button */
 #add-button {
     width: 50px;
     height: 50px;
-    flex-shrink: 0; /* Prevent the button from shrinking */
+    flex-shrink: 0;
     padding: 0;
-    font-size: 30px; /* Make the '+' symbol larger */
-    font-weight: 300; /* A thinner plus sign can look more modern */
-    border-radius: 50%; /* Make it a circle */
-    line-height: 1; /* Helps with vertical alignment */
+    font-size: 30px;
+    font-weight: 300;
+    border-radius: 50%;
+    line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-/* New styles for the pronounce button */
 .pronounce-input-button {
     width: 40px;
     height: 40px;
@@ -328,20 +300,19 @@ button:disabled {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--button-tertiary-bg);
-    box-shadow: 0 4px 15px var(--button-tertiary-shadow);
+    background-color: var(--button-primary-bg);
+    box-shadow: 0 4px 15px var(--button-primary-shadow);
 }
 
 .pronounce-input-button:hover:not(:disabled) {
-    background-color: var(--button-tertiary-hover-bg);
-    box-shadow: 0 6px 20px var(--button-tertiary-hover-shadow);
+    background-color: var(--button-primary-hover-bg);
+    box-shadow: 0 6px 20px var(--button-primary-hover-shadow);
 }
 
-/* Container for the multiple input rows */
 #multi-input-container {
     display: flex;
     flex-direction: column;
-    gap: 8px; /* A little space between input rows */
+    gap: 8px;
 }
 
 .add-button-container {
@@ -352,13 +323,12 @@ button:disabled {
 
 .list-actions {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-
-    width: 100%;
     justify-content: space-around;
+    gap: 15px;
     margin-top: 20px;
     margin-bottom: 20px;
+    position: relative;
+    z-index: 10;
 }
 
 .input-with-button.hidden {
@@ -389,12 +359,11 @@ button:disabled {
     right: 25px;
     font-size: 0.9rem;
     color: var(--text-secondary);
-    opacity: 0.7; /* Make it a bit more subtle */
+    opacity: 0.7;
 }
 
-/* --- Modal Styles --- */
 .modal-overlay {
-    display: none; /* Hidden by default */
+    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -523,7 +492,6 @@ body[data-theme="cartoon"] {
 
 body[data-theme="marine"] {
     --bg-gradient: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
-
     --container-bg: rgba(255, 255, 255, 0.25);
     --container-border: rgba(255, 255, 255, 0.2);
     --text-primary: #00394d; /* dark teal */
@@ -540,13 +508,12 @@ body[data-theme="marine"] {
 
 #vocabulary-input {
     width: 100%;
-
 }
 
 /* --- Responsive Design for Mobile Devices --- */
 @media (max-width: 768px) {
     .container {
-        padding: 25px 20px; /* Adjust padding for smaller screens */
+        padding: 25px 20px;
     }
 
     h1 {
@@ -554,21 +521,20 @@ body[data-theme="marine"] {
     }
 
     .list-actions {
-        flex-wrap: wrap; /* This is the key: allows buttons to wrap to the next line */
-        justify-content: center; /* Center the buttons in the available space */
-        gap: 12px; /* Slightly reduce the gap on mobile */
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
     }
 
     .list-actions button {
-        width: 90px; /* Make buttons slightly smaller to fit 3 in a row */
+        width: 90px;
         height: 90px;
-        font-size: 12px; /* Adjust font size to prevent overflow */
+        font-size: 12px;
     }
 
     .feedback-link-container, .version-info-container {
-        position: static; /* Let them flow in the document instead of being fixed to the corners */
+        position: static;
         text-align: center;
         margin-top: 25px;
     }
-}
 }
