@@ -581,13 +581,12 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-       // Load voices and populate the list
-        function loadVoices() {
-            populateVoiceList();
-        }
-        
+        // The onvoiceschanged event is the most reliable way to get voices.
+        // We also call populateVoiceList() once here in case the event has already fired
+        // or for browsers that don't fire it consistently.
+        populateVoiceList();
         if (synth.onvoiceschanged !== undefined) {
-            synth.onvoiceschanged = loadVoices;
+            synth.onvoiceschanged = populateVoiceList;
         }
 
         loadListFromStorage();
@@ -706,5 +705,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     init();
-    populateVoiceList();
 });

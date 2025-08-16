@@ -6,3 +6,4 @@
 
 # Firebase
 firebase-debug.log
+.firebase/hosting.*.cache
