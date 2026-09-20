@@ -52,7 +52,6 @@ html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-zh { color: #fff !import
 html[data-ui="en"] button.ui-lang-toggle .ui-lang-en { color: #fff !important; }
 html[data-ui="en"] button.ui-lang-toggle .ui-lang-zh { color: #111 !important; }
 html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en { color: #111 !important; }
-
 .theme-switcher {
     position: fixed !important;
     top: 8px !important;
@@ -69,14 +68,12 @@ html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en { color: #111 !import
     background: rgba(255,255,255,0.94) !important;
     border-radius: 999px !important;
     box-shadow: 0 2px 12px rgba(0,0,0,0.18) !important;
-    overflow: visible;
 }
 .theme-switcher label {
     margin: 0 !important;
     white-space: nowrap;
     font-size: 11px !important;
     font-weight: 800 !important;
-    letter-spacing: 0.02em;
     color: var(--button-primary-bg, #3d5a80) !important;
     -webkit-text-fill-color: var(--button-primary-bg, #3d5a80) !important;
 }
@@ -91,92 +88,75 @@ html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en { color: #111 !import
     font-size: 11px !important;
     font-weight: 500 !important;
     border: 0 !important;
-    border-radius: 999px !important;
     background: transparent !important;
     box-shadow: none !important;
     -webkit-appearance: none;
     appearance: none;
     color: #222 !important;
-    -webkit-text-fill-color: #222 !important;
-}
-.theme-switcher select option,
-.theme-switcher select optgroup {
-    font-weight: 500;
-    font-size: 13px;
-    color: #111;
 }
 .lang-chips { display: none !important; }
 .main-content { padding-top: 58px !important; box-sizing: border-box; }
 .container { margin-top: 8px !important; }
-button.speak-mini,
-#meaning-modal button.speak-mini {
-    width: auto !important;
-    min-width: 0 !important;
-    height: auto !important;
-    padding: 4px 10px !important;
-    margin: 4px 4px 4px 0 !important;
-    display: inline-flex !important;
-    font-size: 12px !important;
-    line-height: 1.2 !important;
-    border-radius: 999px !important;
-    box-shadow: none !important;
+button.speak-mini, #meaning-modal button.speak-mini {
+    width: auto !important; min-width: 0 !important; height: auto !important;
+    padding: 4px 10px !important; margin: 4px 4px 4px 0 !important;
+    display: inline-flex !important; font-size: 12px !important;
+    border-radius: 999px !important; box-shadow: none !important;
 }
-.meaning-card {
-    text-align: left !important;
-    background: rgba(255,255,255,0.95) !important;
-    color: #222 !important;
-}
-.meaning-card h3, .meaning-card h4, .meaning-card p { color: #222 !important; text-align: left; }
-.pos-tag {
-    display: inline-block;
-    background: #3d5a80;
-    color: #fff;
-    border-radius: 6px;
-    padding: 2px 8px;
-    font-size: 12px;
-    margin-bottom: 6px;
-}
-.daily-quote {
-    display: flex;
-    align-items: flex-start;
+.meaning-card { text-align: left !important; background: rgba(255,255,255,0.95) !important; color: #222 !important; }
+.pos-tag { display: inline-block; background: #3d5a80; color: #fff; border-radius: 6px; padding: 2px 8px; font-size: 12px; }
+
+#daily-quote.daily-quote {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
     gap: 8px;
-    margin: 10px 0 18px;
-    padding: 10px 12px;
-    background: rgba(255,255,255,0.45);
-    border-radius: 14px;
+    margin: 8px 0 16px;
+    padding: 8px 4px 8px 8px;
 }
-.daily-quote-text {
-    flex: 1;
+#daily-quote .daily-quote-main { flex: 1; min-width: 0; text-align: left; }
+#daily-quote-text {
     margin: 0;
     font-size: 14px;
     line-height: 1.45;
-    font-style: italic;
     color: #222;
     text-align: left;
 }
-.daily-quote-by {
-    display: none;
+html[data-ui="en"] #daily-quote-text { font-style: italic; }
+html[data-ui="zh"] #daily-quote-text, html:not([data-ui="en"]) #daily-quote-text { font-style: normal; }
+#daily-quote-by {
+    display: block;
+    margin: 4px 0 0;
+    font-size: 11px;
+    font-style: normal;
+    color: #555;
+    text-align: left;
 }
-.daily-quote-nav {
-    display: flex;
+#daily-quote .daily-quote-nav {
+    display: flex !important;
+    flex-direction: row !important;
     flex-shrink: 0;
     gap: 4px;
-    align-self: center;
+    width: auto !important;
 }
-button.quote-nav-btn {
-    width: 28px !important;
-    min-width: 28px !important;
-    max-width: 28px !important;
-    height: 28px !important;
+html body #daily-quote button#quote-prev,
+html body #daily-quote button#quote-next,
+html body button.quote-nav-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 22px !important;
+    min-width: 22px !important;
+    max-width: 22px !important;
+    height: 22px !important;
     padding: 0 !important;
     margin: 0 !important;
-    border-radius: 999px !important;
-    font-size: 16px !important;
-    line-height: 1 !important;
+    border-radius: 50% !important;
+    font-size: 13px !important;
+    line-height: 22px !important;
     box-shadow: none !important;
+    flex: 0 0 22px !important;
     background: var(--button-primary-bg, #3d5a80) !important;
     color: #fff !important;
 }
-@media (max-width: 480px) {
-    .main-content { padding-top: 62px !important; }
-}
+@media (max-width: 480px) { .main-content { padding-top: 62px !important; } }

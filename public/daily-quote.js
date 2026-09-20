@@ -88,9 +88,14 @@
         var by = document.getElementById('daily-quote-by');
         if (!text || !q) return;
         var ui = (window.DictationI18n && DictationI18n.getUi()) || 'zh';
-        text.textContent = ui === 'en' ? ('\u201c' + q.t + '\u201d') : ('\u300c' + q.t + '\u300d');
-        by.textContent = q.a ? ('\u2014 ' + q.a) : '';
-        text.style.fontStyle = ui === 'en' ? 'italic' : 'normal';
+        if (ui === 'en') {
+            text.textContent = String.fromCharCode(8220) + q.t + String.fromCharCode(8221);
+            text.style.fontStyle = 'italic';
+        } else {
+            text.textContent = String.fromCharCode(12300) + q.t + String.fromCharCode(12301);
+            text.style.fontStyle = 'normal';
+        }
+        by.textContent = q.a ? (String.fromCharCode(8212) + ' ' + q.a) : '';
     }
     function boot() {
         var prev = document.getElementById('quote-prev');
