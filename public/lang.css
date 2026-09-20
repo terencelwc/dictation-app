@@ -1,0 +1,26 @@
+.lang-chips {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 0 0 12px;
+    grid-column: 1 / -1;
+}
+.lang-chip {
+    width: auto;
+    flex: 1;
+    padding: 10px 12px;
+    font-size: 15px;
+    background: rgba(255,255,255,0.45);
+    color: var(--text-primary);
+    box-shadow: none;
+}
+.lang-chip.active {
+    background: var(--button-primary-bg);
+    color: var(--text-on-primary-btn);
+}
+.voice-hint {
+    grid-column: 1 / -1;
+    font-size: 0.9rem;
+    color: var(--status-color);
+    margin: 0 0 12px;
+}
