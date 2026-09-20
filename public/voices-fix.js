@@ -1,4 +1,4 @@
-/* Overrides default voice curation: Cantonese + English first, clear stuck TTS banner. */
+/* Overrides default voice curation: Cantonese default + English. */
 (function () {
     const LANG_PREF_KEY = 'dictationAppLangPref';
     const VOICE_PREF_KEY = 'dictationAppVoiceName';
@@ -55,6 +55,10 @@
         const status = document.getElementById('status');
         if (!synth || !voiceSelect) return;
 
+        if (!localStorage.getItem(LANG_PREF_KEY)) {
+            localStorage.setItem(LANG_PREF_KEY, 'yue');
+        }
+
         function updateChips(pref) {
             document.querySelectorAll('.lang-chip').forEach(function (btn) {
                 btn.classList.toggle('active', btn.dataset.lang === pref);
@@ -90,7 +94,6 @@
 
         function populate() {
             const voices = synth.getVoices() || [];
-            const previous = voiceSelect.selectedOptions[0] && voiceSelect.selectedOptions[0].getAttribute('data-name') || localStorage.getItem(VOICE_PREF_KEY);
             voiceSelect.innerHTML = '';
 
             if (!voices.length) {
@@ -102,12 +105,16 @@
             const yue = usable.filter(isCantonese);
             const en = usable.filter(isEnglish);
             const cmn = usable.filter(isMandarin);
+            const pref = localStorage.getItem(LANG_PREF_KEY) || 'yue';
+            const savedName = localStorage.getItem(VOICE_PREF_KEY);
+            const savedKind = savedName ? kindOf({ name: savedName, lang: '' }) : '';
+            const keepSaved = savedName && (pref === 'en' ? savedKind === 'en' : pref === 'yue' ? (isCantonese({ name: savedName, lang: '' }) || yue.some(function (v) { return v.name === savedName; })) : false);
 
             function group(label, list) {
                 if (!list.length) return;
                 const g = document.createElement('optgroup');
                 g.label = label;
-                list.forEach(function (v) { addOption(g, v, previous); });
+                list.forEach(function (v) { addOption(g, v, keepSaved ? savedName : null); });
                 voiceSelect.appendChild(g);
             }
 
@@ -116,14 +123,12 @@
             group('普通話 Mandarin（備用）', cmn);
 
             if (!voiceSelect.options.length) {
-                usable.slice(0, 20).forEach(function (v) { addOption(voiceSelect, v, previous); });
+                usable.slice(0, 20).forEach(function (v) { addOption(voiceSelect, v, null); });
             }
 
             if (status) status.textContent = '';
             updateHint(yue.length > 0);
-
-            const pref = localStorage.getItem(LANG_PREF_KEY) || (yue.length ? 'yue' : 'en');
-            if (!previous) selectPref(pref);
+            selectPref(pref);
             updateChips(pref);
             return true;
         }
