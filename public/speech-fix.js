@@ -1,29 +1,31 @@
 (function () {
     var currentText = '';
     var paused = false;
+    var finished = false;
     var activeBtn = null;
     var queue = [];
     var playToken = 0;
+    var ICON_PLAY = '\u25B6\uFE0F';
+    var ICON_PAUSE = '\u23F8\uFE0F';
+    var ICON_REPLAY = '\u21A9\uFE0F';
     function isChinese(text) { return /[\u4e00-\u9fff]/.test(text || ''); }
     function synth() { return window.speechSynthesis; }
     function speakWord() {
-        return (window.DictationI18n && window.DictationI18n.t('speak')) || '朗讀';
+        return (window.DictationI18n && window.DictationI18n.t('speak')) || '\u6717\u8b80';
     }
-    function markPlay(btn) {
+    function setIcon(btn, icon, withLabel) {
         if (!btn) return;
-        if (btn.classList.contains('pronounce-input-button')) btn.textContent = '▶';
-        else btn.innerHTML = '▶ ' + speakWord();
+        if (btn.classList.contains('pronounce-input-button') || !withLabel) btn.textContent = icon;
+        else btn.textContent = icon + ' ' + speakWord();
     }
-    function markPause(btn) {
-        if (!btn) return;
-        btn.textContent = '||';
-    }
-    function resetButtons() {
+    function markIdle(btn) { setIcon(btn, ICON_PLAY, true); }
+    function markPlaying(btn) { setIcon(btn, ICON_PAUSE, false); }
+    function markPaused(btn) { setIcon(btn, ICON_PLAY, false); }
+    function markReplay(btn) { setIcon(btn, ICON_REPLAY, false); }
+    function resetOtherButtons() {
         document.querySelectorAll('.speak-mini, .pronounce-input-button, [data-speak]').forEach(function (btn) {
-            if (btn === activeBtn && paused) return;
-            markPlay(btn);
+            if (btn !== activeBtn) markIdle(btn);
         });
-        if (!paused) activeBtn = null;
     }
     function voices() {
         try { return synth().getVoices() || []; } catch (e) { return []; }
@@ -45,7 +47,7 @@
             voice = list.find(function (v) {
                 var l = String(v.lang || '').toLowerCase();
                 var n = String(v.name || '').toLowerCase();
-                if (zh) return l.indexOf('zh-hk') === 0 || l.indexOf('yue') === 0 || n.indexOf('hong kong') >= 0 || n.indexOf('cantonese') >= 0 || n.indexOf('香港') >= 0 || n.indexOf('sin') >= 0;
+                if (zh) return l.indexOf('zh-hk') === 0 || l.indexOf('yue') === 0 || n.indexOf('hong kong') >= 0 || n.indexOf('cantonese') >= 0 || n.indexOf('\u9999\u6e2f') >= 0 || n.indexOf('sin') >= 0;
                 return l.indexOf('en') === 0;
             }) || list.find(function (v) {
                 var l = String(v.lang || '').toLowerCase();
@@ -72,15 +74,16 @@
         hardStop();
         currentText = '';
         paused = false;
+        finished = false;
         var btn = activeBtn;
         activeBtn = null;
-        if (btn) markPlay(btn);
-        resetButtons();
+        if (btn) markIdle(btn);
+        resetOtherButtons();
     }
     function chunks(text) {
         var src = String(text || '').trim();
         if (src.length <= 160) return [src];
-        var parts = src.split(/([.!?。！？]\s*)/);
+        var parts = src.split(/([.!?\u3002\uff01\uff1f]\s*)/);
         var out = [];
         var buf = '';
         for (var i = 0; i < parts.length; i++) {
@@ -98,10 +101,9 @@
         if (token !== playToken || paused) return;
         var part = queue.shift();
         if (!part) {
-            currentText = '';
+            finished = true;
             paused = false;
-            if (activeBtn) markPlay(activeBtn);
-            activeBtn = null;
+            if (activeBtn) markReplay(activeBtn);
             if (typeof onEnd === 'function') onEnd();
             return;
         }
@@ -127,8 +129,10 @@
         var token = playToken;
         currentText = String(text);
         paused = false;
+        finished = false;
         queue = chunks(text);
-        if (activeBtn) markPause(activeBtn);
+        resetOtherButtons();
+        if (activeBtn) markPlaying(activeBtn);
         setTimeout(function () { speakNext(token, onEnd); }, 30);
     }
     function toggle(text, onEnd, btn) {
@@ -136,9 +140,14 @@
         var s = synth();
         var same = currentText === String(text);
         if (btn) activeBtn = btn;
+        if (same && finished) {
+            start(text, onEnd);
+            return;
+        }
         if (same && paused) {
             paused = false;
-            if (activeBtn) markPause(activeBtn);
+            finished = false;
+            if (activeBtn) markPlaying(activeBtn);
             try { s.resume(); } catch (e) {}
             if (!s.speaking && queue.length) speakNext(playToken, onEnd);
             else if (!s.speaking) start(text, onEnd);
@@ -147,12 +156,14 @@
         if (same && (s.speaking || s.pending || queue.length)) {
             paused = true;
             try { s.pause(); } catch (e) {}
-            if (activeBtn) markPause(activeBtn);
+            if (activeBtn) markPaused(activeBtn);
             setTimeout(function () {
                 if (!paused) return;
                 if (s.speaking && !s.paused) {
                     hardStop();
                     queue = [];
+                    finished = true;
+                    if (activeBtn) markReplay(activeBtn);
                 }
             }, 80);
             return;
