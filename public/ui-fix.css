@@ -1,18 +1,48 @@
-/* Beat global button { width:100% } rules */
 button.ui-lang-toggle {
     position: fixed !important;
-    top: 10px !important;
-    left: 10px !important;
+    top: 8px !important;
+    left: 8px !important;
     right: auto !important;
-    width: 88px !important;
-    min-width: 88px !important;
-    max-width: 88px !important;
-    height: 38px !important;
+    width: 82px !important;
+    min-width: 82px !important;
+    max-width: 82px !important;
+    height: 34px !important;
     padding: 0 6px !important;
     margin: 0 !important;
     z-index: 80 !important;
     border-radius: 999px !important;
     box-shadow: 0 2px 12px rgba(0,0,0,0.18) !important;
+}
+button.ui-lang-toggle .ui-lang-knob {
+    width: 26px !important;
+    height: 26px !important;
+    top: 4px !important;
+}
+html[data-ui="en"] button.ui-lang-toggle .ui-lang-knob {
+    transform: translateX(46px) !important;
+}
+.theme-switcher {
+    position: fixed !important;
+    top: 8px !important;
+    right: 8px !important;
+    left: auto !important;
+    z-index: 80;
+    max-width: calc(100vw - 110px);
+    font-size: 13px;
+}
+.theme-switcher select {
+    max-width: 140px;
+    font-size: 13px;
+}
+.lang-chips {
+    display: none !important;
+}
+.main-content {
+    padding-top: 58px !important;
+    box-sizing: border-box;
+}
+.container {
+    margin-top: 8px !important;
 }
 button.speak-mini,
 #meaning-modal button.speak-mini {
@@ -26,12 +56,6 @@ button.speak-mini,
     line-height: 1.2 !important;
     border-radius: 999px !important;
     box-shadow: none !important;
-}
-.theme-switcher {
-    position: fixed !important;
-    top: 10px !important;
-    right: 10px !important;
-    z-index: 80;
 }
 .meaning-card {
     text-align: left !important;
@@ -50,4 +74,8 @@ button.speak-mini,
     padding: 2px 8px;
     font-size: 12px;
     margin-bottom: 6px;
+}
+@media (max-width: 480px) {
+    .main-content { padding-top: 62px !important; }
+    .theme-switcher select { max-width: 120px; }
 }
