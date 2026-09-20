@@ -1,8 +1,10 @@
 (function () {
+    var currentText = '';
+    var paused = false;
     function isChinese(text) { return /[\u4e00-\u9fff]/.test(text || ''); }
-    function isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+    function synth() { return window.speechSynthesis; }
     function voices() {
-        try { return window.speechSynthesis.getVoices() || []; } catch (e) { return []; }
+        try { return synth().getVoices() || []; } catch (e) { return []; }
     }
     function pick(text) {
         var list = voices();
@@ -30,9 +32,15 @@
         }
         return { voice: voice, lang: (voice && voice.lang) || lang || (zh ? 'zh-HK' : 'en-GB') };
     }
-    function speak(text, onEnd) {
-        if (!text || !window.speechSynthesis) return;
-        var synth = window.speechSynthesis;
+    function stopAll() {
+        try { if (synth()) synth().cancel(); } catch (e) {}
+        currentText = '';
+        paused = false;
+    }
+    function start(text, onEnd) {
+        var s = synth();
+        if (!s) return;
+        try { s.cancel(); } catch (e) {}
         var rateEl = document.getElementById('rate-slider');
         var pitchEl = document.getElementById('pitch-slider');
         var u = new SpeechSynthesisUtterance(String(text));
@@ -42,32 +50,63 @@
         u.rate = parseFloat(rateEl && rateEl.value) || 1;
         u.pitch = parseFloat(pitchEl && pitchEl.value) || 1;
         u.volume = 1;
-        if (typeof onEnd === 'function') u.onend = onEnd;
+        u.onend = function () {
+            currentText = '';
+            paused = false;
+            if (typeof onEnd === 'function') onEnd();
+        };
+        u.onerror = function () {
+            currentText = '';
+            paused = false;
+        };
+        currentText = String(text);
+        paused = false;
         function go() {
-            try { if (synth.paused) synth.resume(); } catch (e) {}
-            synth.speak(u);
-            try { if (synth.paused) synth.resume(); } catch (e) {}
+            try { if (s.paused) s.resume(); } catch (e) {}
+            s.speak(u);
         }
-        if (isIOS()) {
-            go();
-        } else if (synth.speaking || synth.pending) {
-            synth.cancel();
-            setTimeout(go, 50);
-        } else {
-            go();
+        setTimeout(go, 40);
+    }
+    function toggle(text, onEnd) {
+        if (!text || !synth()) return;
+        var s = synth();
+        var same = currentText === String(text);
+        if (same && paused) {
+            paused = false;
+            try { s.resume(); } catch (e) {}
+            if (!s.speaking) start(text, onEnd);
+            return;
         }
+        if (same && (s.speaking || s.pending)) {
+            try { s.pause(); } catch (e) {}
+            paused = true;
+            setTimeout(function () {
+                if (paused && s.speaking && !s.paused) stopAll();
+            }, 120);
+            return;
+        }
+        start(text, onEnd);
     }
     function unlock() {
         try {
-            var s = window.speechSynthesis;
+            var s = synth();
             if (!s) return;
             s.getVoices();
-            if (s.paused) s.resume();
         } catch (e) {}
+    }
+    function shouldStopForLeave(e) {
+        if (!e || !e.target) return false;
+        if (e.target.id === 'meaning-modal' || e.target.id === 'feedback-modal') return true;
+        if (e.target.closest && e.target.closest('.modal-close-btn')) return true;
+        return false;
     }
     document.addEventListener('touchstart', unlock, true);
     document.addEventListener('click', function (e) {
         unlock();
+        if (shouldStopForLeave(e)) {
+            stopAll();
+            return;
+        }
         var play = e.target.closest && e.target.closest('.pronounce-input-button');
         if (play) {
             var wrap = play.closest('.input-with-button');
@@ -76,7 +115,7 @@
             if (text) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                speak(text);
+                toggle(text);
             }
             return;
         }
@@ -86,9 +125,15 @@
             if (said) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                speak(said);
+                toggle(said);
             }
         }
     }, true);
-    window.DictationSpeak = speak;
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) stopAll();
+    });
+    window.addEventListener('pagehide', stopAll);
+    window.addEventListener('beforeunload', stopAll);
+    window.DictationSpeak = toggle;
+    window.DictationSpeakStop = stopAll;
 })();
