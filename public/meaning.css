@@ -54,15 +54,19 @@
     margin: 0 6px 8px 0;
     font-weight: 600;
 }
-#meaning-modal button.speak-mini {
+#meaning-modal button.speak-mini:not(.rel-chip) {
     width: auto !important;
     min-width: 0 !important;
     height: auto !important;
-    padding: 3px 8px !important;
+    padding: 0 !important;
     margin: 0 0 0 6px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    font-size: 13px !important;
-    border-radius: 999px !important;
+    display: inline !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 0 !important;
     box-shadow: none !important;
+    color: #3d5a80 !important;
+    font-size: 18px !important;
+    line-height: 1 !important;
+    vertical-align: middle;
 }
