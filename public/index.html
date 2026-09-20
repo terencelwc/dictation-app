@@ -3,59 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A web application for dictation practice and vocabulary building with text-to-speech.">
-    <title>聽寫練習 Dictation Practice</title>
-    <link rel="stylesheet" href="style.css?v=260920c">
-    <link rel="stylesheet" href="lang.css?v=260920c">
+    <meta name="description" content="Dictation practice with Cantonese and English text-to-speech.">
+    <title>聽寫練習</title>
+    <link rel="stylesheet" href="style.css?v=260921">
+    <link rel="stylesheet" href="lang.css?v=260921">
     <script src="https://cdn.jsdelivr.net/npm/pinyin/dist/pinyin.js"></script>
 </head>
 <body>
+    <button type="button" id="ui-lang-toggle" class="ui-lang-toggle" aria-label="Switch language">
+        <span class="ui-lang-knob"></span>
+        <span class="ui-lang-zh">中</span>
+        <span class="ui-lang-en">Eng</span>
+    </button>
+
     <div class="theme-switcher">
-        <label for="theme-select">主題 Theme:</label>
+        <label for="theme-select" data-i18n="themeLabel">主題</label>
         <select id="theme-select">
-            <option value="default">天蒼 Sky</option>
-            <option value="dark-mode">夜間 Night</option>
-            <option value="sunset">日落 Sunset</option>
-            <option value="peach">蜜桃 Peach</option>
-            <option value="candy">糖果 Candy</option>
-            <option value="lemon">檸檬 Lemon</option>
-            <option value="matcha">抹茶 Matcha</option>
-            <option value="forest">森林 Forest</option>
-            <option value="marine">海洋 Ocean</option>
-            <option value="grape">葡萄 Grape</option>
-            <option value="lava">熔岩 Lava</option>
-            <option value="night-sky">星空 Galaxy</option>
-            <option value="creative">紫霓 Aurora</option>
-            <option value="cartoon">卡通 Cartoon</option>
+            <option value="default" data-zh="天青" data-en="Sky">天青</option>
+            <option value="dark-mode" data-zh="夜間" data-en="Night">夜間</option>
+            <option value="sunset" data-zh="日落" data-en="Sunset">日落</option>
+            <option value="peach" data-zh="蜜桃" data-en="Peach">蜜桃</option>
+            <option value="candy" data-zh="糖果" data-en="Candy">糖果</option>
+            <option value="lemon" data-zh="檸檬" data-en="Lemon">檸檬</option>
+            <option value="matcha" data-zh="抹茶" data-en="Matcha">抹茶</option>
+            <option value="forest" data-zh="森林" data-en="Forest">森林</option>
+            <option value="marine" data-zh="海洋" data-en="Ocean">海洋</option>
+            <option value="grape" data-zh="葡萄" data-en="Grape">葡萄</option>
+            <option value="lava" data-zh="熔岩" data-en="Lava">熔岩</option>
+            <option value="night-sky" data-zh="星空" data-en="Galaxy">星空</option>
+            <option value="creative" data-zh="紫霓" data-en="Aurora">紫霓</option>
+            <option value="cartoon" data-zh="卡通" data-en="Cartoon">卡通</option>
         </select>
     </div>
 
     <main class="main-content">
         <div class="container">
-            <h1>聽寫練習 Dictation Practice</h1>
-            <p>輸入詞語（廣東話或英語），然後開始練習。<br>Enter Cantonese or English words, then start practice.</p>
+            <h1 data-i18n="title">聽寫練習</h1>
+            <p data-i18n="subtitle">輸入詞語，然後開始練習。</p>
             <p id="status" class="status-message"></p>
 
             <div class="settings-grid">
-                <div class="lang-chips" role="group" aria-label="Language">
-                    <button type="button" class="lang-chip" id="lang-yue" data-lang="yue">廣東話 Cantonese</button>
-                    <button type="button" class="lang-chip" id="lang-en" data-lang="en">英語 English</button>
+                <div class="lang-chips" role="group" aria-label="Voice language">
+                    <button type="button" class="lang-chip" id="lang-yue" data-lang="yue" data-i18n="chipYue">廣東話</button>
+                    <button type="button" class="lang-chip" id="lang-cmn" data-lang="cmn" data-i18n="chipCmn">普通話</button>
+                    <button type="button" class="lang-chip" id="lang-en" data-lang="en" data-i18n="chipEn">英語</button>
                 </div>
                 <p id="voice-hint" class="voice-hint"></p>
                 <div class="form-group">
-                    <label for="voice-select">語音 Voice</label>
+                    <label for="voice-select" data-i18n="voiceLabel">語音</label>
                     <select id="voice-select"></select>
                 </div>
                 <div class="form-group">
                     <label for="rate-slider">
-                        <span>速度 Speed</span>
+                        <span data-i18n="speedLabel">速度</span>
                         <span id="rate-value-display" class="slider-value-display">1.0x</span>
                     </label>
                     <input type="range" id="rate-slider" min="0.1" max="2" step="0.1" value="1">
                 </div>
                 <div class="form-group">
                     <label for="pitch-slider">
-                        <span>音調 Pitch</span>
+                        <span data-i18n="pitchLabel">音調</span>
                         <span id="pitch-value-display" class="slider-value-display">1.0</span>
                     </label>
                     <input type="range" id="pitch-slider" min="0" max="2" step="0.1" value="1">
@@ -65,25 +72,25 @@
             <div class="input-section">
                 <div id="multi-input-container"></div>
                 <div class="add-button-container">
-                    <button id="add-button" type="button" title="Add a new input line">+</button>
+                    <button id="add-button" type="button" title="+">+</button>
                 </div>
             </div>
 
             <div class="list-actions">
-                <button id="speak-button">開始聽寫 Start</button>
-                <button id="shuffle-button">打亂 Shuffle</button>
-                <button id="read-all-button">全部朗讀 Read all</button>
-                <button id="show-answers-button">顯示答案 Answers</button>
-                <button id="export-button">匯出 Export</button>
-                <button id="reset-button">重設 Reset</button>
+                <button id="speak-button" data-i18n="btnStart">開始聽寫</button>
+                <button id="shuffle-button" data-i18n="btnShuffle">打亂</button>
+                <button id="read-all-button" data-i18n="btnReadAll">全部朗讀</button>
+                <button id="show-answers-button" data-i18n="btnAnswers">顯示答案</button>
+                <button id="export-button" data-i18n="btnExport">匯出</button>
+                <button id="reset-button" data-i18n="btnReset">重設</button>
             </div>
 
             <div class="feedback-link-container">
-                <a href="#" id="feedback-link">Send Feedback</a>
+                <a href="#" id="feedback-link" data-i18n="feedback">意見回饋</a>
             </div>
 
             <div class="version-info-container">
-                Copyright &copy; LWC | Version: 260920c
+                Copyright &copy; LWC | Version: 260921
             </div>
         </div>
     </main>
@@ -91,22 +98,24 @@
     <div id="feedback-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close-btn">&times;</span>
-            <h2>Send Feedback</h2>
-            <p>Have a suggestion or found a bug? Let me know!</p>
-            <textarea id="feedback-textarea" rows="5" placeholder="Your feedback..."></textarea>
-            <button id="send-feedback-btn">Send via Email</button>
+            <h2 data-i18n="feedbackTitle">意見回饋</h2>
+            <p data-i18n="feedbackBody">有建議或發現問題？請告訴我。</p>
+            <textarea id="feedback-textarea" rows="5" data-i18n-placeholder="feedbackPh" placeholder="你的意見…"></textarea>
+            <button id="send-feedback-btn" data-i18n="feedbackSend">以電郵傳送</button>
         </div>
     </div>
 
     <div id="meaning-modal" class="modal-overlay">
-        <div class="modal-content">
+        <div class="modal-content meaning-card">
             <span class="modal-close-btn">&times;</span>
             <div id="meaning-text"></div>
         </div>
     </div>
 
     <script src="script.js" defer></script>
-    <script src="voices-fix.js" defer></script>
-    <script src="theme-fix.js?v=260920c" defer></script>
+    <script src="ui-i18n.js?v=260921" defer></script>
+    <script src="voices-fix.js?v=260921" defer></script>
+    <script src="meaning-plus.js?v=260921" defer></script>
+    <script src="theme-fix.js?v=260921" defer></script>
 </body>
 </html>
