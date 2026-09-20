@@ -119,18 +119,25 @@ button.speak-mini, #meaning-modal button.speak-mini {
     margin: 0;
     font-size: 14px;
     line-height: 1.45;
-    color: #222;
     text-align: left;
+    color: #7a2e2e !important;
+    -webkit-text-fill-color: #7a2e2e !important;
 }
-html[data-ui="en"] #daily-quote-text { font-style: italic; }
-html[data-ui="zh"] #daily-quote-text, html:not([data-ui="en"]) #daily-quote-text { font-style: normal; }
+html[data-ui="en"] #daily-quote-text {
+    font-style: italic;
+    color: #1d4e89 !important;
+    -webkit-text-fill-color: #1d4e89 !important;
+}
+html[data-ui="zh"] #daily-quote-text,
+html:not([data-ui="en"]) #daily-quote-text { font-style: normal; }
 #daily-quote-by {
     display: block;
     margin: 4px 0 0;
     font-size: 11px;
     font-style: normal;
-    color: #555;
     text-align: left;
+    color: #8a6a3b !important;
+    -webkit-text-fill-color: #8a6a3b !important;
 }
 #daily-quote .daily-quote-nav {
     display: flex !important;
