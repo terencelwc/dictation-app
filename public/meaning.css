@@ -1,0 +1,64 @@
+#meaning-modal .meaning-card {
+    text-align: left !important;
+    max-height: 80vh;
+    overflow: auto;
+    color: #1b1b1b !important;
+    font-size: 16px;
+    line-height: 1.55;
+}
+#meaning-modal .meaning-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+#meaning-modal .meaning-head h3 {
+    margin: 0;
+    font-size: 22px;
+    color: #111 !important;
+}
+#meaning-modal .pinyin,
+#meaning-modal .other-word {
+    margin: 0 0 8px;
+    color: #3d5a80 !important;
+    font-size: 15px;
+}
+#meaning-modal .lang-block {
+    margin: 12px 0;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: #f4f7fb;
+}
+#meaning-modal .lang-block.zh { background: #fff4ee; }
+#meaning-modal .lang-block.en { background: #eef4ff; }
+#meaning-modal .lang-block h4 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: #3d5a80 !important;
+}
+#meaning-modal .def-row p {
+    margin: 0 0 8px;
+    color: #222 !important;
+}
+#meaning-modal .pos-tag {
+    display: inline-block;
+    background: #3d5a80;
+    color: #fff !important;
+    border-radius: 6px;
+    padding: 2px 8px;
+    font-size: 12px;
+    margin: 0 6px 8px 0;
+}
+#meaning-modal button.speak-mini {
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    padding: 3px 8px !important;
+    margin: 0 0 0 6px !important;
+    display: inline-flex !important;
+    font-size: 12px !important;
+    border-radius: 999px !important;
+    box-shadow: none !important;
+}
