@@ -136,6 +136,47 @@ button.speak-mini,
     font-size: 12px;
     margin-bottom: 6px;
 }
+.daily-quote {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 10px 0 18px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.45);
+    border-radius: 14px;
+}
+.daily-quote-text {
+    flex: 1;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.45;
+    font-style: italic;
+    color: #222;
+    text-align: left;
+}
+.daily-quote-by {
+    display: none;
+}
+.daily-quote-nav {
+    display: flex;
+    flex-shrink: 0;
+    gap: 4px;
+    align-self: center;
+}
+button.quote-nav-btn {
+    width: 28px !important;
+    min-width: 28px !important;
+    max-width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 999px !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+    background: var(--button-primary-bg, #3d5a80) !important;
+    color: #fff !important;
+}
 @media (max-width: 480px) {
     .main-content { padding-top: 62px !important; }
 }
