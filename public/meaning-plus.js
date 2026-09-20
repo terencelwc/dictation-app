@@ -2,7 +2,7 @@
     var POS = { noun:'posNoun', verb:'posVerb', adjective:'posAdj', adverb:'posAdv', pronoun:'posPron', preposition:'posPrep', conjunction:'posConj', interjection:'posInt', determiner:'posDet', article:'posDet' };
     function t(k){ return window.DictationI18n ? window.DictationI18n.t(k) : k; }
     function isChinese(text){ return /[\u4e00-\u9fff]/.test(text || ''); }
-    function esc(s){ return String(s||'').replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+    function esc(s){ return String(s||'').replace(/[&<>"]/g, function(c){ return ({'&':'&','<':'<','>':'>','"':'"'})[c]; }); }
     function strip(html){
         var d = document.createElement('div');
         d.innerHTML = html || '';
@@ -10,7 +10,7 @@
     }
     function speakBtn(text){
         if (!text) return '';
-        return '<button type="button" class="speak-mini" data-speak="'+esc(text)+'">'+String.fromCharCode(9654)+' '+esc(t('speak'))+'</button>';
+        return '<button type="button" class="speak-mini" data-speak="'+esc(text)+'" aria-label="play">\u25B6\uFE0F</button>';
     }
     function fetchJson(url, ms){
         ms = ms || 8000;
@@ -103,17 +103,11 @@
         return html + '</section>';
     }
     function speak(text){
+        if (window.DictationSpeak) { window.DictationSpeak(text); return; }
         if (!text || !window.speechSynthesis) return;
         window.speechSynthesis.cancel();
         var u = new SpeechSynthesisUtterance(text);
-        var voices = window.speechSynthesis.getVoices() || [];
-        var zh = isChinese(text);
-        var voice = voices.find(function(v){
-            var l = String(v.lang||'').toLowerCase();
-            return zh ? (l.indexOf('zh')===0 || l.indexOf('yue')===0 || l.indexOf('cmn')===0) : l.indexOf('en')===0;
-        });
-        if (voice) { u.voice = voice; u.lang = voice.lang; }
-        else u.lang = zh ? 'zh-HK' : 'en-GB';
+        u.lang = isChinese(text) ? 'zh-HK' : 'en-GB';
         window.speechSynthesis.speak(u);
     }
     async function showRich(text){
@@ -144,17 +138,13 @@
             var wikiB = '';
             if (otherTitle) wikiB = await wikiSummary(isChinese(word) ? 'en' : 'zh', otherTitle);
             var related = enWord ? await datamuse(enWord.toLowerCase()) : { syn:[], ant:[] };
-
             var zhRows = [];
             var enRows = [];
-            if (moe && moe.defs) {
-                moe.defs.slice(0,3).forEach(function(d){ zhRows.push({ pos: d.pos, text: d.zh, example: d.example }); });
-            }
+            if (moe && moe.defs) moe.defs.slice(0,3).forEach(function(d){ zhRows.push({ pos: d.pos, text: d.zh, example: d.example }); });
             if (wikiA && isChinese(word)) zhRows.push({ pos: '', text: wikiA });
             if (wikiB && !isChinese(word)) zhRows.push({ pos: '', text: wikiB });
             if (wikiA && !isChinese(word)) enRows.push({ pos: '', text: wikiA });
             if (wikiB && isChinese(word)) enRows.push({ pos: '', text: wikiB });
-
             wikt.forEach(function(item){
                 if (item.lang === 'zh' || isChinese(item.en)) zhRows.push({ pos: item.pos, text: item.en });
                 else enRows.push({ pos: item.pos, text: item.en });
@@ -166,7 +156,6 @@
                     });
                 });
             }
-
             function uniq(rows){
                 var seen = {};
                 return rows.filter(function(r){
@@ -178,7 +167,6 @@
             }
             zhRows = uniq(zhRows);
             enRows = uniq(enRows);
-
             var html = '<div class="meaning-head"><h3>'+esc(word)+'</h3>'+speakBtn(word)+'</div>';
             if (moe && moe.pinyin) html += '<p class="pinyin">'+esc(moe.pinyin)+'</p>';
             if (zhWord && zhWord !== word) html += '<p class="other-word">'+esc(zhWord)+speakBtn(zhWord)+'</p>';
@@ -206,13 +194,6 @@
                 e.preventDefault();
                 showRich(text);
             }, true);
-        }
-        var meaning = document.getElementById('meaning-modal');
-        if (meaning) {
-            meaning.addEventListener('click', function(e){
-                var btn = e.target.closest('[data-speak]');
-                if (btn) { e.preventDefault(); speak(btn.getAttribute('data-speak')); }
-            });
         }
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
