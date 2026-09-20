@@ -60,44 +60,49 @@ html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en { color: #111 !import
     left: auto !important;
     z-index: 80;
     height: 36px !important;
-    padding: 0 12px 0 14px !important;
+    padding: 0 10px 0 12px !important;
     margin: 0 !important;
     display: flex !important;
     align-items: center !important;
-    gap: 6px !important;
-    max-width: calc(100vw - 128px);
+    gap: 4px !important;
+    max-width: calc(100vw - 120px);
     background: rgba(255,255,255,0.94) !important;
     border-radius: 999px !important;
     box-shadow: 0 2px 12px rgba(0,0,0,0.18) !important;
-    overflow: hidden;
+    overflow: visible;
 }
 .theme-switcher label {
     margin: 0 !important;
     white-space: nowrap;
-    font-size: 13px !important;
+    font-size: 11px !important;
     font-weight: 800 !important;
-    color: #111 !important;
-    -webkit-text-fill-color: #111 !important;
+    letter-spacing: 0.02em;
+    color: var(--button-primary-bg, #3d5a80) !important;
+    -webkit-text-fill-color: var(--button-primary-bg, #3d5a80) !important;
 }
 .theme-switcher select {
+    flex: 1 1 auto;
+    min-width: 0;
     height: 30px !important;
-    max-width: 148px;
-    padding: 0 18px 0 4px !important;
+    max-width: none !important;
+    width: auto !important;
+    padding: 0 4px 0 2px !important;
     margin: 0 !important;
-    font-size: 13px !important;
-    font-weight: 800 !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
     border: 0 !important;
     border-radius: 999px !important;
     background: transparent !important;
     box-shadow: none !important;
     -webkit-appearance: none;
     appearance: none;
-    color: #111 !important;
-    -webkit-text-fill-color: #111 !important;
+    color: #222 !important;
+    -webkit-text-fill-color: #222 !important;
 }
 .theme-switcher select option,
 .theme-switcher select optgroup {
-    font-weight: 700;
+    font-weight: 500;
+    font-size: 13px;
     color: #111;
 }
 .lang-chips { display: none !important; }
@@ -133,5 +138,4 @@ button.speak-mini,
 }
 @media (max-width: 480px) {
     .main-content { padding-top: 62px !important; }
-    .theme-switcher select { max-width: 118px; }
 }
