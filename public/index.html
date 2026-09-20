@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-HK">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A web application for dictation practice and vocabulary building with text-to-speech.">
-    <title>Dictation Practice App</title>
+    <title>聽寫練習 Dictation Practice</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/pinyin/dist/pinyin.js"></script>
 </head>
@@ -23,25 +23,30 @@
 
     <main class="main-content">
         <div class="container">
-            <h1>Dictation Practice</h1>
-            <p>Enter your vocabulary below, then use the controls to start your practice session.</p>
+            <h1>聽寫練習 Dictation Practice</h1>
+            <p>輸入詞語（廣東話或英語），然後開始練習。<br>Enter Cantonese or English words, then start practice.</p>
             <p id="status" class="status-message"></p>
 
             <div class="settings-grid">
+                <div class="lang-chips" role="group" aria-label="Language">
+                    <button type="button" class="lang-chip" id="lang-yue" data-lang="yue">廣東話 Cantonese</button>
+                    <button type="button" class="lang-chip" id="lang-en" data-lang="en">英語 English</button>
+                </div>
+                <p id="voice-hint" class="voice-hint"></p>
                 <div class="form-group">
-                    <label for="voice-select">Voice</label>
+                    <label for="voice-select">語音 Voice</label>
                     <select id="voice-select"></select>
                 </div>
                 <div class="form-group">
                     <label for="rate-slider">
-                        <span>Speed</span>
+                        <span>速度 Speed</span>
                         <span id="rate-value-display" class="slider-value-display">1.0x</span>
                     </label>
                     <input type="range" id="rate-slider" min="0.1" max="2" step="0.1" value="1">
                 </div>
                 <div class="form-group">
                     <label for="pitch-slider">
-                        <span>Pitch</span>
+                        <span>音調 Pitch</span>
                         <span id="pitch-value-display" class="slider-value-display">1.0</span>
                     </label>
                     <input type="range" id="pitch-slider" min="0" max="2" step="0.1" value="1">
@@ -49,36 +54,31 @@
             </div>
 
             <div class="input-section">
-                <div id="multi-input-container">
-                    <!-- JS will populate this -->
-                </div>
-        
+                <div id="multi-input-container"></div>
                 <div class="add-button-container">
                     <button id="add-button" type="button" title="Add a new input line">+</button>
                 </div>
             </div>
 
             <div class="list-actions">
-                <button id="speak-button">Start Dictation</button>
-                <button id="shuffle-button">Shuffle</button>
-                <button id="read-all-button">Read All</button>
-                <button id="show-answers-button">Show Answers</button>
-                <button id="export-button">Export as .txt</button>
-                <button id="reset-button">Reset</button>
+                <button id="speak-button">開始聽寫 Start</button>
+                <button id="shuffle-button">打亂 Shuffle</button>
+                <button id="read-all-button">全部朗讀 Read all</button>
+                <button id="show-answers-button">顯示答案 Answers</button>
+                <button id="export-button">匯出 Export</button>
+                <button id="reset-button">重設 Reset</button>
             </div>
 
             <div class="feedback-link-container">
                 <a href="#" id="feedback-link">Send Feedback</a>
             </div>
 
-            <!-- Version Information -->
             <div class="version-info-container">
-                Copyright &copy; LWC | Version: 250817
+                Copyright &copy; LWC | Version: 260920
             </div>
         </div>
     </main>
 
-    <!-- Feedback Modal -->
     <div id="feedback-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close-btn">&times;</span>
@@ -89,7 +89,6 @@
         </div>
     </div>
 
-    <!-- Meaning Modal -->
     <div id="meaning-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close-btn">&times;</span>
