@@ -10,20 +10,19 @@
     var ICON_REPLAY = '\u21A9\uFE0F';
     function isChinese(text) { return /[\u4e00-\u9fff]/.test(text || ''); }
     function synth() { return window.speechSynthesis; }
-    function speakWord() {
-        return (window.DictationI18n && window.DictationI18n.t('speak')) || '\u6717\u8b80';
+    function isExplainIcon(btn) {
+        return !!(btn && btn.matches && btn.matches('#meaning-modal button.speak-mini[data-speak]:not(.rel-chip)'));
     }
-    function setIcon(btn, icon, withLabel) {
-        if (!btn) return;
-        if (btn.classList.contains('pronounce-input-button') || !withLabel) btn.textContent = icon;
-        else btn.textContent = icon + ' ' + speakWord();
+    function setIcon(btn, icon) {
+        if (!isExplainIcon(btn)) return;
+        btn.textContent = icon;
     }
-    function markIdle(btn) { setIcon(btn, ICON_PLAY, true); }
-    function markPlaying(btn) { setIcon(btn, ICON_PAUSE, false); }
-    function markPaused(btn) { setIcon(btn, ICON_PLAY, false); }
-    function markReplay(btn) { setIcon(btn, ICON_REPLAY, false); }
+    function markIdle(btn) { setIcon(btn, ICON_PLAY); }
+    function markPlaying(btn) { setIcon(btn, ICON_PAUSE); }
+    function markPaused(btn) { setIcon(btn, ICON_PLAY); }
+    function markReplay(btn) { setIcon(btn, ICON_REPLAY); }
     function resetOtherButtons() {
-        document.querySelectorAll('.speak-mini, .pronounce-input-button, [data-speak]').forEach(function (btn) {
+        document.querySelectorAll('#meaning-modal button.speak-mini[data-speak]:not(.rel-chip)').forEach(function (btn) {
             if (btn !== activeBtn) markIdle(btn);
         });
     }
@@ -47,7 +46,7 @@
             voice = list.find(function (v) {
                 var l = String(v.lang || '').toLowerCase();
                 var n = String(v.name || '').toLowerCase();
-                if (zh) return l.indexOf('zh-hk') === 0 || l.indexOf('yue') === 0 || n.indexOf('hong kong') >= 0 || n.indexOf('cantonese') >= 0 || n.indexOf('\u9999\u6e2f') >= 0 || n.indexOf('sin') >= 0;
+                if (zh) return l.indexOf('zh-hk') === 0 || l.indexOf('yue') === 0 || n.indexOf('hong kong') >= 0 || n.indexOf('cantonese') >= 0 || n.indexOf('香港') >= 0 || n.indexOf('sin') >= 0;
                 return l.indexOf('en') === 0;
             }) || list.find(function (v) {
                 var l = String(v.lang || '').toLowerCase();
@@ -139,11 +138,8 @@
         if (!text || !synth()) return;
         var s = synth();
         var same = currentText === String(text);
-        if (btn) activeBtn = btn;
-        if (same && finished) {
-            start(text, onEnd);
-            return;
-        }
+        if (isExplainIcon(btn)) activeBtn = btn;
+        if (same && finished) { start(text, onEnd); return; }
         if (same && paused) {
             paused = false;
             finished = false;
@@ -191,11 +187,11 @@
             if (text) {
                 e.preventDefault();
                 e.stopImmediatePropagation();
-                toggle(text, null, play);
+                toggle(text, null, null);
             }
             return;
         }
-        var mini = e.target.closest && e.target.closest('[data-speak]');
+        var mini = e.target.closest && e.target.closest('#meaning-modal [data-speak]');
         if (mini) {
             var said = mini.getAttribute('data-speak');
             if (said) {
