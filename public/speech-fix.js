@@ -1,5 +1,6 @@
 (function () {
     function isChinese(text) { return /[\u4e00-\u9fff]/.test(text || ''); }
+    function isIOS() { return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
     function voices() {
         try { return window.speechSynthesis.getVoices() || []; } catch (e) { return []; }
     }
@@ -42,21 +43,18 @@
         u.pitch = parseFloat(pitchEl && pitchEl.value) || 1;
         u.volume = 1;
         if (typeof onEnd === 'function') u.onend = onEnd;
-        u.onerror = function () { if (typeof onEnd === 'function') onEnd(); };
         function go() {
             try { if (synth.paused) synth.resume(); } catch (e) {}
             synth.speak(u);
             try { if (synth.paused) synth.resume(); } catch (e) {}
         }
-        try {
-            if (synth.speaking || synth.pending) {
-                synth.cancel();
-                setTimeout(go, 60);
-            } else {
-                go();
-            }
-        } catch (e) {
-            setTimeout(go, 60);
+        if (isIOS()) {
+            go();
+        } else if (synth.speaking || synth.pending) {
+            synth.cancel();
+            setTimeout(go, 50);
+        } else {
+            go();
         }
     }
     function unlock() {
@@ -68,6 +66,29 @@
         } catch (e) {}
     }
     document.addEventListener('touchstart', unlock, true);
-    document.addEventListener('click', unlock, true);
+    document.addEventListener('click', function (e) {
+        unlock();
+        var play = e.target.closest && e.target.closest('.pronounce-input-button');
+        if (play) {
+            var wrap = play.closest('.input-with-button');
+            var input = wrap && wrap.querySelector('.vocabulary-input');
+            var text = input && input.value.trim();
+            if (text) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                speak(text);
+            }
+            return;
+        }
+        var mini = e.target.closest && e.target.closest('[data-speak]');
+        if (mini) {
+            var said = mini.getAttribute('data-speak');
+            if (said) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                speak(said);
+            }
+        }
+    }, true);
     window.DictationSpeak = speak;
 })();
