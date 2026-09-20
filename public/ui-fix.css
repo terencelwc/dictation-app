@@ -3,23 +3,61 @@ button.ui-lang-toggle {
     top: 8px !important;
     left: 8px !important;
     right: auto !important;
-    width: 82px !important;
-    min-width: 82px !important;
-    max-width: 82px !important;
-    height: 34px !important;
-    padding: 0 6px !important;
+    width: 104px !important;
+    min-width: 104px !important;
+    max-width: 104px !important;
+    height: 36px !important;
+    padding: 3px !important;
     margin: 0 !important;
     z-index: 80 !important;
     border-radius: 999px !important;
     box-shadow: 0 2px 12px rgba(0,0,0,0.18) !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    align-items: center !important;
+    background: rgba(255,255,255,0.88) !important;
 }
 button.ui-lang-toggle .ui-lang-knob {
-    width: 26px !important;
-    height: 26px !important;
-    top: 4px !important;
+    position: absolute !important;
+    top: 3px !important;
+    left: 3px !important;
+    width: calc(50% - 3px) !important;
+    min-width: calc(50% - 3px) !important;
+    height: calc(100% - 6px) !important;
+    border-radius: 999px !important;
+    background: var(--button-primary-bg, #3d5a80) !important;
+    transform: none !important;
+    transition: left 0.2s ease !important;
 }
 html[data-ui="en"] button.ui-lang-toggle .ui-lang-knob {
-    transform: translateX(46px) !important;
+    left: calc(50%) !important;
+    transform: none !important;
+}
+button.ui-lang-toggle .ui-lang-zh,
+button.ui-lang-toggle .ui-lang-en {
+    position: relative !important;
+    z-index: 1 !important;
+    width: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: 13px !important;
+    line-height: 1 !important;
+    pointer-events: none;
+}
+html[data-ui="zh"] button.ui-lang-toggle .ui-lang-zh,
+html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-zh {
+    color: #fff !important;
+}
+html[data-ui="en"] button.ui-lang-toggle .ui-lang-en {
+    color: #fff !important;
+}
+html[data-ui="en"] button.ui-lang-toggle .ui-lang-zh {
+    color: #222 !important;
+}
+html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en {
+    color: #222 !important;
 }
 .theme-switcher {
     position: fixed !important;
@@ -27,23 +65,19 @@ html[data-ui="en"] button.ui-lang-toggle .ui-lang-knob {
     right: 8px !important;
     left: auto !important;
     z-index: 80;
-    max-width: calc(100vw - 110px);
+    max-width: calc(100vw - 130px);
     font-size: 13px;
 }
 .theme-switcher select {
     max-width: 140px;
     font-size: 13px;
 }
-.lang-chips {
-    display: none !important;
-}
+.lang-chips { display: none !important; }
 .main-content {
     padding-top: 58px !important;
     box-sizing: border-box;
 }
-.container {
-    margin-top: 8px !important;
-}
+.container { margin-top: 8px !important; }
 button.speak-mini,
 #meaning-modal button.speak-mini {
     width: auto !important;
