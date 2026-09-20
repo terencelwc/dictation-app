@@ -15,7 +15,7 @@ button.ui-lang-toggle {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     align-items: center !important;
-    background: rgba(255,255,255,0.88) !important;
+    background: rgba(255,255,255,0.94) !important;
 }
 button.ui-lang-toggle .ui-lang-knob {
     position: absolute !important;
@@ -43,14 +43,15 @@ button.ui-lang-toggle .ui-lang-en {
     justify-content: center !important;
     text-align: center !important;
     font-size: 13px !important;
+    font-weight: 800 !important;
     line-height: 1 !important;
     pointer-events: none;
 }
 html[data-ui="zh"] button.ui-lang-toggle .ui-lang-zh,
 html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-zh { color: #fff !important; }
 html[data-ui="en"] button.ui-lang-toggle .ui-lang-en { color: #fff !important; }
-html[data-ui="en"] button.ui-lang-toggle .ui-lang-zh { color: #222 !important; }
-html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en { color: #222 !important; }
+html[data-ui="en"] button.ui-lang-toggle .ui-lang-zh { color: #111 !important; }
+html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en { color: #111 !important; }
 
 .theme-switcher {
     position: fixed !important;
@@ -65,8 +66,7 @@ html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en { color: #222 !import
     align-items: center !important;
     gap: 6px !important;
     max-width: calc(100vw - 128px);
-    font-size: 13px;
-    background: rgba(255,255,255,0.88) !important;
+    background: rgba(255,255,255,0.94) !important;
     border-radius: 999px !important;
     box-shadow: 0 2px 12px rgba(0,0,0,0.18) !important;
     overflow: hidden;
@@ -75,27 +75,33 @@ html:not([data-ui="en"]) button.ui-lang-toggle .ui-lang-en { color: #222 !import
     margin: 0 !important;
     white-space: nowrap;
     font-size: 13px !important;
-    color: #222 !important;
+    font-weight: 800 !important;
+    color: #111 !important;
+    -webkit-text-fill-color: #111 !important;
 }
 .theme-switcher select {
     height: 30px !important;
     max-width: 148px;
-    padding: 0 22px 0 6px !important;
+    padding: 0 18px 0 4px !important;
     margin: 0 !important;
     font-size: 13px !important;
+    font-weight: 800 !important;
     border: 0 !important;
     border-radius: 999px !important;
     background: transparent !important;
     box-shadow: none !important;
     -webkit-appearance: none;
     appearance: none;
-    color: #222 !important;
+    color: #111 !important;
+    -webkit-text-fill-color: #111 !important;
+}
+.theme-switcher select option,
+.theme-switcher select optgroup {
+    font-weight: 700;
+    color: #111;
 }
 .lang-chips { display: none !important; }
-.main-content {
-    padding-top: 58px !important;
-    box-sizing: border-box;
-}
+.main-content { padding-top: 58px !important; box-sizing: border-box; }
 .container { margin-top: 8px !important; }
 button.speak-mini,
 #meaning-modal button.speak-mini {
@@ -115,10 +121,7 @@ button.speak-mini,
     background: rgba(255,255,255,0.95) !important;
     color: #222 !important;
 }
-.meaning-card h3, .meaning-card h4, .meaning-card p {
-    color: #222 !important;
-    text-align: left;
-}
+.meaning-card h3, .meaning-card h4, .meaning-card p { color: #222 !important; text-align: left; }
 .pos-tag {
     display: inline-block;
     background: #3d5a80;

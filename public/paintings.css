@@ -1,4 +1,3 @@
-/* Famous public-domain paintings as full-page backgrounds. */
 html[data-theme^="art-"] {
     --text-primary: #1a1a1a;
     --text-secondary: #2d2d2d;
@@ -9,7 +8,7 @@ html[data-theme^="art-"] {
     --button-primary-hover-bg: #293241;
 }
 html[data-theme^="art-"] body {
-    background-color: #222 !important;
+    background-color: #2a2a2a !important;
     background-size: cover !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
@@ -21,35 +20,31 @@ html[data-theme^="art-"] .modal-content {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
-html[data-theme^="art-"] .theme-switcher,
-html[data-theme^="art-"] .ui-lang-toggle {
-    background: rgba(255,255,255,0.78);
-}
 
 html[data-theme="art-sunrise"], html[data-theme="art-sunrise"] body {
     background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Monet_-_Impression%2C_Sunrise.jpg/1280px-Monet_-_Impression%2C_Sunrise.jpg") !important;
 }
 html[data-theme="art-lilies"], html[data-theme="art-lilies"] body {
-    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Claude_Monet_-_Water_Lilies%2C_1917-1919.JPG/1280px-Claude_Monet_-_Water_Lilies%2C_1917-1919.JPG") !important;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Water_Lilies_%28Monet%2C_1919%29.JPG/1280px-Water_Lilies_%28Monet%2C_1919%29.JPG") !important;
 }
 html[data-theme="art-starry"], html[data-theme="art-starry"] body {
     background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg") !important;
 }
 html[data-theme="art-sun"], html[data-theme="art-sun"] body {
-    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Vincent_Willem_van_Gogh_127.jpg/800px-Vincent_Willem_van_Gogh_127.jpg") !important;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Vincent_van_Gogh_-_Sunflowers_-_VGM_F458.jpg/800px-Vincent_van_Gogh_-_Sunflowers_-_VGM_F458.jpg") !important;
 }
 html[data-theme="art-pearl"], html[data-theme="art-pearl"] body {
-    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/1665_Girl_with_a_Pearl_Earring.jpg/800px-1665_Girl_with_a_Pearl_Earring.jpg") !important;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Girl_with_a_Pearl_Earring.jpg/800px-Girl_with_a_Pearl_Earring.jpg") !important;
 }
 html[data-theme="art-wave"], html[data-theme="art-wave"] body {
     background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/The_Great_Wave_off_Kanagawa.jpg/1280px-The_Great_Wave_off_Kanagawa.jpg") !important;
 }
 html[data-theme="art-kiss"], html[data-theme="art-kiss"] body {
-    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg/800px-The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg") !important;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Klimt_-_The_Kiss.jpg/800px-Klimt_-_The_Kiss.jpg") !important;
 }
 html[data-theme="art-venus"], html[data-theme="art-venus"] body {
     background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg/1280px-Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg") !important;
 }
 html[data-theme="art-cezanne"], html[data-theme="art-cezanne"] body {
-    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Paul_C%C3%A9zanne_109.jpg/1024px-Paul_C%C3%A9zanne_109.jpg") !important;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Montagne_Sainte-Victoire%2C_par_Paul_C%C3%A9zanne_109.jpg/1024px-Montagne_Sainte-Victoire%2C_par_Paul_C%C3%A9zanne_109.jpg") !important;
 }
