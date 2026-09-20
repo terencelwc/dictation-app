@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Dictation practice with Cantonese and English text-to-speech.">
     <title>聽寫練習</title>
-    <link rel="stylesheet" href="style.css?v=260921d">
-    <link rel="stylesheet" href="lang.css?v=260921d">
-    <link rel="stylesheet" href="paintings.css?v=260921d">
+    <link rel="stylesheet" href="style.css?v=260921e">
+    <link rel="stylesheet" href="lang.css?v=260921e">
+    <link rel="stylesheet" href="paintings.css?v=260921e">
+    <link rel="stylesheet" href="ui-fix.css?v=260921e">
     <script src="https://cdn.jsdelivr.net/npm/pinyin/dist/pinyin.js"></script>
 </head>
 <body>
@@ -42,7 +43,7 @@
                 <option value="art-starry" data-zh="梵高·星夜" data-en="Van Gogh Starry">梵高·星夜</option>
                 <option value="art-sun" data-zh="梵高·向日葵" data-en="Van Gogh Sunflowers">梵高·向日葵</option>
                 <option value="art-pearl" data-zh="維梅爾·珍珠耳環" data-en="Vermeer Pearl">維梅爾·珍珠耳環</option>
-                <option value="art-wave" data-zh="北鼎·巨浪" data-en="Hokusai Wave">北鼎·巨浪</option>
+                <option value="art-wave" data-zh="北齋·巨浪" data-en="Hokusai Wave">北齋·巨浪</option>
                 <option value="art-kiss" data-zh="克林姆·吻" data-en="Klimt Kiss">克林姆·吻</option>
                 <option value="art-venus" data-zh="波提切利·維納斯" data-en="Botticelli Venus">波提切利·維納斯</option>
                 <option value="art-cezanne" data-zh="塞尚·聖山" data-en="Cezanne Mountain">塞尚·聖山</option>
@@ -55,7 +56,6 @@
             <h1 data-i18n="title">聽寫練習</h1>
             <p data-i18n="subtitle">輸入詞語，然後開始練習。</p>
             <p id="status" class="status-message"></p>
-
             <div class="settings-grid">
                 <div class="lang-chips" role="group" aria-label="Voice language">
                     <button type="button" class="lang-chip" id="lang-yue" data-lang="yue" data-i18n="chipYue">廣東話</button>
@@ -82,14 +82,12 @@
                     <input type="range" id="pitch-slider" min="0" max="2" step="0.1" value="1">
                 </div>
             </div>
-
             <div class="input-section">
                 <div id="multi-input-container"></div>
                 <div class="add-button-container">
                     <button id="add-button" type="button" title="+">+</button>
                 </div>
             </div>
-
             <div class="list-actions">
                 <button id="speak-button" data-i18n="btnStart">開始聽寫</button>
                 <button id="shuffle-button" data-i18n="btnShuffle">打亂</button>
@@ -98,17 +96,14 @@
                 <button id="export-button" data-i18n="btnExport">匯出</button>
                 <button id="reset-button" data-i18n="btnReset">重設</button>
             </div>
-
             <div class="feedback-link-container">
                 <a href="#" id="feedback-link" data-i18n="feedback">意見回饋</a>
             </div>
-
             <div class="version-info-container">
-                Copyright &copy; LWC | Version: 260921d
+                Copyright &copy; LWC | Version: 260921e
             </div>
         </div>
     </main>
-
     <div id="feedback-modal" class="modal-overlay">
         <div class="modal-content">
             <span class="modal-close-btn">&times;</span>
@@ -118,18 +113,16 @@
             <button id="send-feedback-btn" data-i18n="feedbackSend">以電郵傳送</button>
         </div>
     </div>
-
     <div id="meaning-modal" class="modal-overlay">
         <div class="modal-content meaning-card">
             <span class="modal-close-btn">&times;</span>
             <div id="meaning-text"></div>
         </div>
     </div>
-
     <script src="script.js" defer></script>
-    <script src="ui-i18n.js?v=260921d" defer></script>
-    <script src="voices-fix.js?v=260921d" defer></script>
-    <script src="meaning-plus.js?v=260921d" defer></script>
-    <script src="theme-fix.js?v=260921d" defer></script>
+    <script src="ui-i18n.js?v=260921e" defer></script>
+    <script src="voices-fix.js?v=260921e" defer></script>
+    <script src="meaning-plus.js?v=260921e" defer></script>
+    <script src="theme-fix.js?v=260921e" defer></script>
 </body>
 </html>
